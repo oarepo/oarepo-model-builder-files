@@ -1,0 +1,37 @@
+from invenio_records_resources.services import FileLink
+{% for c in python.parent_record_service_config_components %}
+from {{ c|package_name }} import {{ c|base_name }}
+{% endfor %}
+
+class {{ python.parent_record_service_config_class|base_name }}:
+
+    # todo - this could be nicer
+    {% if python.record_service_config_bases %}
+    components = [ *{% for b in python.parent_record_service_config_bases[:1] %}{{ b|base_name }}.components{% endfor %}{% for c in python.parent_record_service_config_components %}, {{ c|base_name }} {% endfor %}]
+    {% endif %}
+
+    @property
+    def links_item(self):
+        return {
+            "self": RecordLink("{self.url_prefix}{id}"),
+            # todo
+            "files": RecordLink("{self.url_prefix}{id}/files"),
+        }
+
+class {{ python.record_service_config_class|base_name }}:
+    record_cls = {{ python.parent_record_class|base_name }}
+    search = None
+    # todo remove links property
+    @property
+    def file_links_list(self):
+        return {
+            "self": RecordLink("{self.url_prefix}{id}/files"),
+        }
+
+    @property
+    def file_links_item(self):
+        return {
+            "self": FileLink("{self.url_prefix}{id}/files/{key}"),
+            "content": FileLink("{self.url_prefix}{id}/files/{key}/content"),
+            "commit": FileLink("{self.url_prefix}{id}/files/{key}/commit"),
+        }

@@ -1,0 +1,102 @@
+from io import BytesIO
+import pytest
+
+
+@pytest.fixture()
+def input_data(input_data):
+    input_data["files"] = {"enabled": True}
+    return input_data
+
+
+def test_files_api_flow(client, search_clear, headers, input_data, location):
+    """Test record creation."""
+    # Initialize a draft
+    res = client.post("{{ settings.parent_collection_url }}", headers=headers, json=input_data)
+    assert res.status_code == 201
+    id_ = res.json["id"]
+    assert res.json["links"]["files"].endswith(f"{id_}/files")
+
+    # Initialize files upload
+    res = client.post(
+        f"{{ settings.parent_collection_url }}{id_}/files", # todo - this won't work if the url is specified differently
+        headers=headers,
+        json=[
+            {"key": "test.pdf", "title": "Test file"},
+        ],
+    )
+    assert res.status_code == 201
+    res_file = res.json["entries"][0]
+    assert res_file["key"] == "test.pdf"
+    assert res_file["status"] == "pending"
+    assert res_file["metadata"] == {"title": "Test file"}
+    assert res_file["links"]["self"].endswith(f"{id_}/files/test.pdf")
+    assert res_file["links"]["content"].endswith(
+        f"files/test.pdf/content"
+    )
+    assert res_file["links"]["commit"].endswith(
+        f"files/test.pdf/commit"
+    )
+
+    # Get the file metadata
+    res = client.get(f"{{ settings.parent_collection_url }}{id_}/files/test.pdf", headers=headers)
+    assert res.status_code == 200
+    assert res.json["key"] == "test.pdf"
+    assert res.json["status"] == "pending"
+    assert res.json["metadata"] == {"title": "Test file"}
+
+    # Upload a file
+    res = client.put(
+        f"{{ settings.parent_collection_url }}{id_}/files/test.pdf/content",
+        headers={
+            "content-type": "application/octet-stream",
+            "accept": "application/json",
+        },
+        data=BytesIO(b"testfile"),
+    )
+    assert res.status_code == 200
+    assert res.json["status"] == "pending"
+
+    # Commit the uploaded file
+    res = client.post(f"{{ settings.parent_collection_url }}{id_}/files/test.pdf/commit", headers=headers)
+    assert res.status_code == 200
+    assert res.json["status"] == "completed"
+
+    # Get the file metadata
+    res = client.get(f"{{ settings.parent_collection_url }}{id_}/files/test.pdf", headers=headers)
+    assert res.status_code == 200
+    assert res.json["key"] == "test.pdf"
+    assert res.json["status"] == "completed"
+    assert res.json["metadata"] == {"title": "Test file"}
+    file_size = str(res.json["size"])
+    assert isinstance(res.json["size"], int), "File size not integer"
+
+    # Read a file's content
+    res = client.get(f"{{ settings.parent_collection_url }}{id_}/files/test.pdf/content", headers=headers)
+    assert res.status_code == 200
+    assert res.data == b"testfile"
+
+    # Update file metadata
+    res = client.put(
+        f"{{ settings.parent_collection_url }}{id_}/files/test.pdf", headers=headers, json={"title": "New title"}
+    )
+    assert res.status_code == 200
+    assert res.json["key"] == "test.pdf"
+    assert res.json["status"] == "completed"
+    assert res.json["metadata"] == {"title": "New title"}
+
+    # Get all files
+    res = client.get(f"{{ settings.parent_collection_url }}{id_}/files", headers=headers)
+    assert res.status_code == 200
+    assert len(res.json["entries"]) == 1
+    assert res.json["entries"][0]["key"] == "test.pdf"
+    assert res.json["entries"][0]["status"] == "completed"
+    assert res.json["entries"][0]["metadata"] == {"title": "New title"}
+
+    # Delete a file
+    res = client.delete(f"{{ settings.parent_collection_url }}{id_}/files/test.pdf", headers=headers)
+    assert res.status_code == 204
+
+    # Get all files
+    res = client.get(f"{{ settings.parent_collection_url }}{id_}/files", headers=headers)
+    assert res.status_code == 200
+    assert len(res.json["entries"]) == 0
