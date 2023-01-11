@@ -10,5 +10,6 @@ class InvenioFilesTestFileResourcesBuilder(InvenioBaseClassPythonBuilder):
         self.process_template(
             python_path,
             self.template,
+            parent_settings=self.settings.parent_schema.settings,
             **extra_kwargs,
         )

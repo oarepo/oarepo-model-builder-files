@@ -10,41 +10,9 @@
   "settings": {
     "type": "object",
     "properties": {
-      "parent-collection-url": {
-        "type": "string"
+      "parent-schema": {
+        "$ref": "#/$defs/root"
       },
     },
   },
-  "settings-python": {
-    "type": "object",
-    "properties": {
-      "parent-record-class": {
-        "type": "string"
-      },
-      "parent-record-metadata-class": {
-        "type": "string"
-      },
-      "parent-record-service-config-class": {
-        "type": "string"
-      },
-      "parent-service-id": {
-        "type": "string"
-      },
-      "service-id": {
-        "type": "string"
-      },
-      "parent-record-service-config-components": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      },
-      "parent-record-service-config-bases": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      }
-    }
-  }
 }

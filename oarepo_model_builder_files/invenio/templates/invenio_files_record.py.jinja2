@@ -1,13 +1,3 @@
-from invenio_records_resources.records.systemfields import FilesField
-from invenio_records.systemfields import ModelField
-
 class {{ python.record_class|base_name }}:
     record_cls = None  # is defined below
-class {{ python.parent_record_class|base_name }}:
-    files = FilesField(store=False, file_cls={{ python.record_class|base_name }})
-    bucket_id = ModelField()
-    bucket = ModelField(dump=False)
 
-# todo - prohodit poradi
-
-{{ python.record_class|base_name }}.record_cls = {{ python.parent_record_class|base_name }}

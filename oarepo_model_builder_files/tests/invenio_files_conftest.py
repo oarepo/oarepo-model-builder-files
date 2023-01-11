@@ -1,5 +1,5 @@
 from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuilder
-from oarepo_model_builder.utils.jinja import package_name
+
 
 class InvenioFilesConftestBuilder(InvenioBaseClassPythonBuilder):
     TYPE = "invenio_files_conftest"
