@@ -6,18 +6,15 @@ class InvenioModelFilesBaseClassesPreprocessor(ModelPreprocessor):
 
     def transform(self, schema, settings):
         python = settings.python
-        python.setdefault("record-resource-class-bases", []).append(
-            "invenio_records_resources.resources.files.resource.FileResource")
-        python.setdefault("record-resource-config-class-bases", []).append("invenio_records_resources.resources.FileResourceConfig")
-        python.setdefault("record-service-bases", []).append(
-            "invenio_records_resources.services.FileService")
-        python.setdefault("record-bases", []).append(
-            "invenio_records_resources.records.api.FileRecord")
-        python.setdefault("record-service-config-bases", []).append(
-            "invenio_records_resources.services.FileServiceConfig")
-        python.setdefault("record-metadata-bases", []).append(
-            "invenio_records_resources.records.FileRecordModelMixin"
-        )
-
-        #todo - get it somewhere else
-        python["record-search-options-class"] = ""
+        self.set_default_and_append_if_not_present(python, "record-resource-class-bases", [],
+                                                   "invenio_records_resources.resources.files.resource.FileResource")
+        self.set_default_and_append_if_not_present(python, "record-resource-config-class-bases", [],
+                                                   "invenio_records_resources.resources.FileResourceConfig")
+        self.set_default_and_append_if_not_present(python, "record-service-bases", [],
+                                                   "invenio_records_resources.services.FileService")
+        self.set_default_and_append_if_not_present(python, "record-bases", [],
+                                                   "invenio_records_resources.records.api.FileRecord")
+        self.set_default_and_append_if_not_present(python, "record-service-config-bases", [],
+                                                   "invenio_records_resources.services.FileServiceConfig")
+        self.set_default_and_append_if_not_present(python, "record-metadata-bases", [],
+                                                   "invenio_records_resources.records.FileRecordModelMixin")

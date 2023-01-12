@@ -13,7 +13,7 @@ class InvenioModelFilesPreprocessor(ModelPreprocessor):
         python.setdefault("record-prefix", f"{parent_record_prefix}File")
         python.setdefault("record-permissions-class", model_python.record_permissions_class)
         python.setdefault("profile-package", "files")
-        python.setdefault("record-search-options-class", None)
+        python.setdefault("record-search-options-class", "")
         settings["collection-url"] = f'{settings.parent_schema.settings["collection-url"]}<pid_value>'
         settings.parent_schema.settings.python.setdefault("record-service-config-components", []).append("invenio_records_resources.services.records.components.FilesOptionsComponent")
 

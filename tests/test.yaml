@@ -1,0 +1,30 @@
+model:
+  properties:
+    metadata:
+      properties:
+        title:
+          type: fulltext
+        status:
+          type: keyword
+
+settings:
+  package: test
+  schema-server: 'local://'
+
+
+files:
+  model:
+    properties:
+      title:
+        type: fulltext
+  settings:
+    package: test
+    schema-server: 'local://'
+  oarepo:use:
+    - invenio_files
+#  settings:
+#    model_name: test_file
+
+oarepo:use:
+  - invenio
+

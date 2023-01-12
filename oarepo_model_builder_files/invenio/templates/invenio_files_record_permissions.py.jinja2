@@ -1,12 +1,6 @@
 from invenio_records_resources.services.files.generators import AnyUserIfFileIsLocal
 
 class {{ python.record_permissions_class|base_name }}:
-    can_search = [AnyUser(), SystemProcess()]
-    can_create = [AnyUser(), SystemProcess()]
-    can_read = [AnyUser(), SystemProcess()]
-    can_update = [AnyUser(), SystemProcess()]
-    can_delete = [AnyUser(), SystemProcess()]
-
     # todo - edit the first?
     can_create_files = [AnyUser(), SystemProcess()]
     can_set_content_files = [AnyUserIfFileIsLocal(), SystemProcess()]

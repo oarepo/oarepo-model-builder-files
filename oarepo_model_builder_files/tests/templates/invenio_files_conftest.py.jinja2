@@ -7,14 +7,6 @@ from invenio_records_resources.resources import FileResource
 from invenio_app.factory import create_api as _create_api
 import pytest
 
-
-
-@pytest.fixture(scope="module")
-def create_app(instance_path, entry_points):
-    """Application factory fixture."""
-    return _create_api
-
-
 @pytest.fixture(scope="module")
 def file_service():
     """File service shared fixture."""
@@ -45,20 +37,6 @@ def input_data():
 
 @pytest.fixture(scope="module")
 def app_config(app_config):
-
-    app_config["JSONSCHEMAS_HOST"] = "localhost"
-    app_config[
-        "RECORDS_REFRESOLVER_CLS"
-    ] = "invenio_records.resolver.InvenioRefResolver"
-    app_config[
-        "RECORDS_REFRESOLVER_STORE"
-    ] = "invenio_jsonschemas.proxies.current_refresolver_store"
-
-    app_config["SEARCH_HOSTS"] = [
-        dict(host=os.environ.get("INVENIO_SEARCH_HOST",'localhost'), port=os.environ.get("INVENIO_SEARCH_PORT", '9200')),
-    ]
-
-    # todo - wHat does this mean??
     app_config["FILES_REST_STORAGE_CLASS_LIST"] = {
         "L": "Local",
         "F": "Fetch",
