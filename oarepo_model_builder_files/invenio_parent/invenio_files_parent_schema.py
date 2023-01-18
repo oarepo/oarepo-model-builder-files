@@ -6,10 +6,10 @@ class InvenioFilesParentSchemaBuilder(InvenioBaseClassPythonBuilder):
     template = "files-parent-schema"
 
     def finish(self, **extra_kwargs):
-        python_path = self.class_to_path(self.settings.parent_schema.model["oarepo:marshmallow"]["class"])
+        python_path = self.class_to_path(self.settings.parent_schema.model["oarepo:marshmallow"]["schema-class"])
         self.process_template(
             python_path,
             self.template,
-            current_package_name=package_name(self.settings.parent_schema.model["oarepo:marshmallow"]["class"]),
+            current_package_name=package_name(self.settings.parent_schema.model["oarepo:marshmallow"]["schema-class"]),
             **extra_kwargs,
         )
