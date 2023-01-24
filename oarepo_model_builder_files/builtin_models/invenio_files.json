@@ -1,57 +1,56 @@
 {
-  "model": {
-    "oarepo:marshmallow": {
-      "base-classes": [
-        "InvenioFileSchema"
-      ],
-      "imports": [
-        {
-          "import": "invenio_records_resources.services.files.schema.FileSchema",
-          "alias": "InvenioFileSchema"
-        }
-      ]
+  "marshmallow": {
+    "base-classes": [
+      "InvenioFileSchema"
+    ],
+    "imports": [
+      {
+        "import": "invenio_records_resources.services.files.schema.FileSchema",
+        "alias": "InvenioFileSchema"
+      }
+    ]
+  },
+  "properties": {
+    "id": {
+      "type": "keyword",
+      "sample": {
+        "skip": true
+      },
+      "marshmallow": {
+        "read": false,
+        "write": false
+      }
     },
-    "properties": {
-      "id": {
-        "type": "keyword",
-        "oarepo:sample": {
-          "skip": true
-        },
-        "oarepo:marshmallow": {
-          "read": false,
-          "write": false
-        }
+    "created": {
+      "type": "date",
+      "sample": {
+        "skip": true
       },
-      "created": {
-        "type": "date",
-        "oarepo:sample": {
-          "skip": true
-        },
-        "oarepo:marshmallow": {
-          "write": false,
-          "read": true
-        }
+      "marshmallow": {
+        "write": false,
+        "read": true
+      }
+    },
+    "updated": {
+      "type": "date",
+      "sample": {
+        "skip": true
       },
-      "updated": {
-        "type": "date",
-        "oarepo:sample": {
-          "skip": true
-        },
-        "oarepo:marshmallow": {
-          "write": false,
-          "read": true
-        }
+      "marshmallow": {
+        "write": false,
+        "read": true
+      }
+    },
+    "$schema": {
+      "type": "keyword",
+      "marshmallow": {
+        "read": false,
+        "write": false
       },
-      "$schema": {
-        "type": "keyword",
-        "oarepo:marshmallow": {
-          "read": false,
-          "write": false
-        },
-        "oarepo:sample": {
-          "skip": true
-        }
+      "sample": {
+        "skip": true
       }
     }
   }
 }
+

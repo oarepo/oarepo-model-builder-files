@@ -1,7 +1,7 @@
 from marshmallow.utils import get_value
-from {{ python.record_schema_class|package_name }} import FilesOptionsSchema
+from {{ files.record_schema_class|package_name }} import FilesOptionsSchema
 
-class {{ settings.parent_schema.model["oarepo:marshmallow"]["schema-class"]|base_name }}:
+class {{ model["marshmallow"]["schema-class"]|base_name }}:
     files = ma_fields.Nested(FilesOptionsSchema, required=True)
 
     # todo this needs to be generated for [default preview] to work

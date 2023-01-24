@@ -1,15 +1,7 @@
-from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuilder
+from oarepo_model_builder_files.invenio.invenio_files import InvenioFilesClassPythonBuilder
 
 
-class InvenioFilesConftestBuilder(InvenioBaseClassPythonBuilder):
+class InvenioFilesConftestBuilder(InvenioFilesClassPythonBuilder):
     TYPE = "invenio_files_conftest"
     template = "files-conftest"
     MODULE = "tests.files.conftest"
-
-    def finish(self, **extra_kwargs):
-        python_path = self.module_to_path(self.MODULE)
-        self.process_template(
-            python_path,
-            self.template,
-            **extra_kwargs,
-        )

@@ -23,10 +23,7 @@ class FileProfile(Profile):
             output_directory: Union[str, Path],
             builder: ModelBuilder,
     ):
-        # todo how the settings for the file model should look like exactly?
-        # todo how the schema for defining the file model (or submodels in general) should look like? Should there be a
-        # specific schema for types of models to prevent recursion for specific types for example?
-        # new_model = copy.deepcopy(model)
+        """
         parent_model_builder = create_builder_from_entrypoints(
             profile='model', conflict_resolver=AutomaticResolver(resolution_type="replace"), overwrite=True
         )
@@ -47,5 +44,7 @@ class FileProfile(Profile):
 
         python.use_isort = model.schema.settings.python.use_isort
         python.use_black = model.schema.settings.python.use_black
-
-        builder.build(new_model, output_directory)
+        """
+        del model.model["known-classes"]
+        model.model_field = "files"
+        builder.build(model, output_directory)

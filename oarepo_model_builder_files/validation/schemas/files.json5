@@ -3,16 +3,8 @@
     "type": "object",
     "properties": {
       "files": {
-        "$ref": "#/$defs/root"
+        "$ref": "#/$defs/model"
       },
     }
-  },
-  "settings": {
-    "type": "object",
-    "properties": {
-      "parent-schema": {
-        "$ref": "#/$defs/root"
-      },
-    },
   },
 }

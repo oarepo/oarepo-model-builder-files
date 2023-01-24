@@ -1,9 +1,7 @@
-from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuilder
+from oarepo_model_builder_files.invenio.invenio_files import InvenioFilesClassPythonBuilder
 
-class InvenioFilesRecordMetadataBuilder(InvenioBaseClassPythonBuilder):
+
+class InvenioFilesRecordMetadataBuilder(InvenioFilesClassPythonBuilder):
     TYPE = "invenio_files_record_metadata"
     class_config = "record-metadata-class"
     template = "files-record-metadata"
-
-    def finish(self, **extra_kwargs):
-        super().finish(parent_settings=self.settings.parent_schema.settings, **extra_kwargs)

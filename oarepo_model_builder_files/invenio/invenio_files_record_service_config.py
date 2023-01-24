@@ -1,9 +1,7 @@
-from oarepo_model_builder.invenio.invenio_base import InvenioBaseClassPythonBuilder
+from oarepo_model_builder_files.invenio.invenio_files import InvenioFilesClassPythonBuilder
 
-class InvenioRecordServiceConfigBuilder(InvenioBaseClassPythonBuilder):
+
+class InvenioRecordServiceConfigBuilder(InvenioFilesClassPythonBuilder):
     TYPE = "invenio_files_record_service_config"
     class_config = "record-service-config-class"
     template = "files-service-config"
-
-    def finish(self, **extra_kwargs):
-        super().finish(parent_settings=self.settings.parent_schema.settings, **extra_kwargs)
