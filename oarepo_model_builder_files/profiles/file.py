@@ -45,6 +45,6 @@ class FileProfile(Profile):
         python.use_isort = model.schema.settings.python.use_isort
         python.use_black = model.schema.settings.python.use_black
         """
-        del model.model["known-classes"]
+        del model.current_model["known-classes"]
         model.model_field = "files"
         builder.build(model, output_directory)
