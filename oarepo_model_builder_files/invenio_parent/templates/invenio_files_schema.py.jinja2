@@ -2,7 +2,7 @@ from marshmallow.utils import get_value
 from {{ files.record_schema_class|package_name }} import FilesOptionsSchema
 
 class {{ model["marshmallow"]["schema-class"]|base_name }}:
-    files = ma_fields.Nested(FilesOptionsSchema, required=True)
+    files = ma_fields.Nested(FilesOptionsSchema, load_default={'enabled': True})
 
     # todo this needs to be generated for [default preview] to work
     def get_attribute(self, obj, attr, default):
