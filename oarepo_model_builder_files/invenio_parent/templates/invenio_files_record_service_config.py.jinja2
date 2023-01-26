@@ -13,6 +13,5 @@ class {{ model.record_service_config_class|base_name }}:
     def links_item(self):
         return {
             "self": RecordLink("{self.url_prefix}{id}"),
-            # todo
             "files": RecordLink("{self.url_prefix}{id}/files"),
         }
