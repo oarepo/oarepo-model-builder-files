@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-MODEL="test"
+MODEL="example"
 VENV=".model_venv"
 #export OPENSEARCH_PORT=9400
 #cd $(dirname $0)/..
