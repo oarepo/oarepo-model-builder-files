@@ -12,7 +12,6 @@ model:
     - invenio
 
 files:
-  type: object
   properties:
     metadata:
       properties:
