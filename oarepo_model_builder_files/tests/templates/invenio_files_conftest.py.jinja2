@@ -29,11 +29,8 @@ def headers():
 
 
 @pytest.fixture()
-def input_data():
-    """Input data (as coming from the view layer)."""
-    return {
-        "metadata": {"title": "Test"},
-    }
+def input_data(sample_metadata_list):
+    return sample_metadata_list[0]
 
 @pytest.fixture(scope="module")
 def app_config(app_config):
