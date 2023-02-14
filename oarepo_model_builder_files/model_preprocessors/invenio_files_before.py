@@ -14,6 +14,6 @@ class InvenioModelFilesBeforePreprocessor(ModelPreprocessor):
         files.setdefault("record-prefix", f"{parent_record_prefix}File")
         files.setdefault("record-permissions-class", model.record_permissions_class)
         files.setdefault("profile-package", "files")
-        files.setdefault("extra-fixtures", ["location"])
+        #files.setdefault("extra-fixtures", ["location"])
         files.setdefault("collection-url", f'{model["collection-url"]}<pid_value>')
         model.setdefault("record-service-config-components", []).append("invenio_records_resources.services.records.components.FilesOptionsComponent")
