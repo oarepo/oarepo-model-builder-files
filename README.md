@@ -15,7 +15,5 @@ To get an idea which code is reused, see entrypoints. For configuration changes,
 
 The files plugin provides an api for working with files.
 The api is by default accessible at {original model url}/{base record id}/files.
-Basic information about the invenio framework for working with is available [here](https://invenio.readthedocs.io/en/latest/documentation/main-concepts/handling-files.html).
-
-/todo invenio file api documentation for this version doesn't seem to be available/
+The api is taken from InvenioRDM, the docs are [here](https://inveniordm.docs.cern.ch/reference/rest_api_drafts_records/#record-files)
 
