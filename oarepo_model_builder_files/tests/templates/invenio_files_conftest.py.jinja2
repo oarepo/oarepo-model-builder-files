@@ -27,11 +27,6 @@ def headers():
         "accept": "application/json",
     }
 
-
-@pytest.fixture()
-def input_data(sample_metadata_list):
-    return sample_metadata_list[0]
-
 @pytest.fixture(scope="module")
 def app_config(app_config):
     app_config["FILES_REST_STORAGE_CLASS_LIST"] = {

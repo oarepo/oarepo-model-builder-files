@@ -23,28 +23,10 @@ class FileProfile(Profile):
             output_directory: Union[str, Path],
             builder: ModelBuilder,
     ):
-        """
-        parent_model_builder = create_builder_from_entrypoints(
-            profile='model', conflict_resolver=AutomaticResolver(resolution_type="replace"), overwrite=True
-        )
-        parent_model_builder.set_schema(model)
-        parent_model_builder._run_model_preprocessors(model)
+        original_model_preprocessors = [model_preprocessor for model_preprocessor in builder.model_preprocessor_classes
+                                        if "oarepo_model_builder." in str(model_preprocessor)]
+        for model_preprocessor in original_model_preprocessors:
+            model_preprocessor(builder).transform(model, model.settings)
 
-        new_schema = model.schema["files"]
-        new_model = ModelSchema(file_path=model.file_path, content=new_schema, included_models=model.included_schemas,
-                                loaders=model.loaders)
-
-
-        new_model.schema.settings["package"] = model.schema.settings.package
-
-
-        new_model.schema.settings.python = HyphenMunch()
-        python = new_model.schema.settings.python
-        new_model.schema.settings["parent-schema"] = model.schema
-
-        python.use_isort = model.schema.settings.python.use_isort
-        python.use_black = model.schema.settings.python.use_black
-        """
-        del model.current_model["known-classes"]
         model.model_field = "files"
         builder.build(model, output_directory)

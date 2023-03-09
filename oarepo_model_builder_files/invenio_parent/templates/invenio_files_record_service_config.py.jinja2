@@ -4,7 +4,6 @@ from {{ c|package_name }} import {{ c|base_name }}
 
 class {{ model.record_service_config_class|base_name }}:
 
-    # todo - this could be nicer
     {% if files.record_service_config_bases %}
     components = [ {% for c in model.record_service_config_components %}{{ ", " if not loop.first else "" }} {{ c|base_name }} {% endfor %}]
     {% endif %}
