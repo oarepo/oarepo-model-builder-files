@@ -17,3 +17,36 @@ The files plugin provides an api for working with files.
 The api is by default accessible at {original model url}/{base record id}/files.
 The api is taken from InvenioRDM, the docs are [here](https://inveniordm.docs.cern.ch/reference/rest_api_drafts_records/#record-files)
 
+## Example
+
+A simple record with associated files can be defined as this:
+```yaml
+model:
+  properties:
+    metadata:
+      properties:
+        title:
+          type: fulltext
+        status:
+          type: keyword
+  package: thesis
+  schema-server: 'local://'
+  use:
+    - invenio
+
+files:
+  properties:
+    metadata:
+      properties:
+        title:
+          type: fulltext
+  package: thesis
+  schema-server: 'local://'
+  use:
+    - invenio_files
+```
+Using the api, first an
+instance of the model has to be created. Then an instance of the
+associated file record. The file content is then uploaded in separate step and
+finally the upload must be commited.
+ 
