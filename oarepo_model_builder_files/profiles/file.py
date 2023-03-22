@@ -25,6 +25,7 @@ class FileProfile(Profile):
     ):
         original_model_preprocessors = [model_preprocessor for model_preprocessor in builder.model_preprocessor_classes
                                         if "oarepo_model_builder." in str(model_preprocessor)]
+        builder._validate_model(model)
         for model_preprocessor in original_model_preprocessors:
             model_preprocessor(builder).transform(model, model.settings)
 
