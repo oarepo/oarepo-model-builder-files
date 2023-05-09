@@ -5,5 +5,5 @@ TEMPLATES = {
     "files-permissions": "templates/invenio_files_record_permissions.py.jinja2",
     "files-service-config": "templates/invenio_files_record_service_config.py.jinja2",
     "files-schema": "templates/invenio_files_schema.py.jinja2",
-    "files-original-schema-extension": "templates/invenio_files_schema_parent_extension.py.jinja2"
+    "files-original-schema-extension": "templates/invenio_files_schema_parent_extension.py.jinja2",
 }

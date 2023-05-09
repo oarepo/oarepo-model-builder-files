@@ -8,6 +8,10 @@ VENV=".model_venv"
 if test -d ./tests/$MODEL; then
 	rm -rf ./tests/$MODEL
 fi
+if test -d $VENV ; then
+	rm -rf $VENV
+fi
+
 oarepo-compile-model ./tests/$MODEL.yaml --output-directory ./tests/$MODEL --profile model,files -vvv
 python3 -m venv $VENV
 . $VENV/bin/activate

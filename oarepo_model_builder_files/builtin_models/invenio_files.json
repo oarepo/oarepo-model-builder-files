@@ -1,8 +1,6 @@
 {
   "marshmallow": {
-    "base-classes": [
-      "InvenioFileSchema"
-    ],
+    "base-classes": ["InvenioFileSchema"],
     "imports": [
       {
         "import": "invenio_records_resources.services.files.schema.FileSchema",
@@ -16,6 +14,12 @@
       "sample": {
         "skip": true
       },
+      "ui": {
+        "marshmallow": {
+          "read": false,
+          "write": false
+        }
+      },
       "marshmallow": {
         "read": false,
         "write": false
@@ -25,6 +29,12 @@
       "type": "date",
       "sample": {
         "skip": true
+      },
+      "ui": {
+        "marshmallow": {
+          "read": false,
+          "write": false
+        }
       },
       "marshmallow": {
         "write": false,
@@ -36,6 +46,12 @@
       "sample": {
         "skip": true
       },
+      "ui": {
+        "marshmallow": {
+          "read": false,
+          "write": false
+        }
+      },
       "marshmallow": {
         "write": false,
         "read": true
@@ -43,6 +59,12 @@
     },
     "$schema": {
       "type": "keyword",
+      "ui": {
+        "marshmallow": {
+          "read": false,
+          "write": false
+        }
+      },
       "marshmallow": {
         "read": false,
         "write": false
@@ -53,4 +75,3 @@
     }
   }
 }
-

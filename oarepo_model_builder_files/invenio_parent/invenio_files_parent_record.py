@@ -1,5 +1,8 @@
 from oarepo_model_builder.utils.jinja import package_name
-from oarepo_model_builder_files.invenio.invenio_files import InvenioFilesClassPythonBuilder
+
+from oarepo_model_builder_files.invenio.invenio_files import (
+    InvenioFilesClassPythonBuilder,
+)
 
 
 class InvenioFilesParentRecordBuilder(InvenioFilesClassPythonBuilder):
@@ -8,5 +11,6 @@ class InvenioFilesParentRecordBuilder(InvenioFilesClassPythonBuilder):
     template = "files-parent-record"
 
     def get_module(self):
-        return package_name(self.schema.model[self.class_config]) #use parent class path
-
+        return package_name(
+            self.schema["model"][self.class_config]
+        )  # use parent class path

@@ -1,8 +1,8 @@
 from invenio_records_resources.services import FileLink
-from {{ model.record_class|package_name }} import {{ model.record_class|base_name }}
+from {{ model['record-class']|package_name }} import {{ model['record-class']|base_name }}
 
-class {{ files.record_service_config_class|base_name }}:
-    record_cls = {{ model.record_class|base_name }}
+class {{ files['record-service-config-class']|base_name }}:
+    record_cls = {{ model['record-class']|base_name }}
     # todo remove links property
     @property
     def file_links_list(self):

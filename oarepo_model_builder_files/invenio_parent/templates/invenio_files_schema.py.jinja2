@@ -1,5 +1,5 @@
 from marshmallow.utils import get_value
-from {{ files.record_schema_class|package_name }} import FilesOptionsSchema
+from {{ files['record-schema-class']|package_name }} import FilesOptionsSchema
 
 class {{ model["marshmallow"]["schema-class"]|base_name }}:
     files = ma_fields.Nested(FilesOptionsSchema, load_default={'enabled': True})

@@ -1,4 +1,7 @@
-from oarepo_model_builder_files.invenio.invenio_files import InvenioFilesClassPythonBuilder
+from oarepo_model_builder_files.invenio.invenio_files import (
+    InvenioFilesClassPythonBuilder,
+)
+
 
 class InvenioConftestBuilder(InvenioFilesClassPythonBuilder):
     TYPE = "conftest"

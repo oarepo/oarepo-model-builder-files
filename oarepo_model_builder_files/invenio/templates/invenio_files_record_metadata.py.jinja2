@@ -1,4 +1,4 @@
-from {{ model.record_metadata_class|package_name }} import {{ model.record_metadata_class|base_name }}
+from {{ model['record-metadata-class']|package_name }} import {{ model['record-metadata-class']|base_name }}
 
-class {{ files.record_metadata_class|base_name }}:
-    __record_model_cls__ = {{ model.record_metadata_class|base_name }}
+class {{ files['record-metadata-class']|base_name }}:
+    __record_model_cls__ = {{ model['record-metadata-class']|base_name }}
