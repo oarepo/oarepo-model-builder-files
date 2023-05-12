@@ -6,4 +6,4 @@ class InvenioFilesTestFileResourcesBuilder(InvenioFilesParentBuilder):
     template = "files-test-file-resources"
 
     def _get_output_module(self):
-        return f'{self.current_model.definition["tests"]["module"]}.test_file_resources'
+        return f'{self.current_model.definition["tests"]["module"]}.files.test_file_resources'

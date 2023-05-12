@@ -1,4 +1,4 @@
-from .file import FileComponent
-from .file_metadata import FileMetadataComponent
+from .file import FileComponent, FileMetadataComponent
+from .parent_record import ParentRecordComponent
 
-file_components = [FileComponent, FileMetadataComponent]
+file_components = [FileComponent, FileMetadataComponent, ParentRecordComponent]

@@ -6,9 +6,16 @@ from oarepo_model_builder.datatypes import (
     ModelDataType,
     Section,
 )
-from oarepo_model_builder.datatypes.components import DefaultsModelComponent
+from oarepo_model_builder.datatypes.components import (
+    DefaultsModelComponent,
+    RecordMetadataModelComponent,
+)
 from oarepo_model_builder.datatypes.components.model.pid import process_pid_type
-from oarepo_model_builder.datatypes.components.model.utils import set_default
+from oarepo_model_builder.datatypes.components.model.utils import (
+    append_array,
+    place_after,
+    set_default,
+)
 from oarepo_model_builder.datatypes.model import Link
 
 
@@ -41,13 +48,14 @@ class FileComponent(DataTypeComponent):
                 )
             )
         else:
+            section.config.pop("links_search")
             # remove normal links and add
             section.config["file_links_list"] = [
-                *section.config.pop("links_search"),
                 Link(
-                    name="files-archive",
+                    name="self",
                     link_class="RecordLink",
-                    link_args=['"{+api}/mocks/{id}/files-archive"'],
+                    link_args=['"{self.url_prefix}{id}/files"'],
+                    imports=[Import("invenio_records_resources.services.RecordLink")],
                 ),
             ]
 
@@ -55,30 +63,30 @@ class FileComponent(DataTypeComponent):
             section.config["file_links_item"] = [
                 Link(
                     name="self",
-                    link_class="RecordLink",
+                    link_class="FileLink",
                     link_args=['"{self.url_prefix}{id}/files/{key}"'],
-                    imports=[Import("invenio_records_resources.services.RecordLink")],
+                    imports=[Import("invenio_records_resources.services.FileLink")],
                 ),
                 Link(
                     name="content",
-                    link_class="RecordLink",
+                    link_class="FileLink",
                     link_args=['"{self.url_prefix}{id}/files/{key}/content"'],
-                    imports=[Import("invenio_records_resources.services.RecordLink")],
+                    imports=[Import("invenio_records_resources.services.FileLink")],
                 ),
                 Link(
                     name="commit",
-                    link_class="RecordLink",
+                    link_class="FileLink",
                     link_args=['"{self.url_prefix}{id}/files/{key}/commit"'],
-                    imports=[Import("invenio_records_resources.services.RecordLink")],
+                    imports=[Import("invenio_records_resources.services.FileLink")],
                 ),
             ]
 
     def process_mb_invenio_record_service_config(self, *, datatype, section, **kwargs):
         if self.is_file_profile:
             # override class as it has to be a parent class
-            section.config["class"] = datatype.parent_record.definition["record"][
+            section.config.setdefault("record", {})[
                 "class"
-            ]
+            ] = datatype.parent_record.definition["record"]["class"]
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
         self.is_file_profile = context["profile"] == "files"
@@ -89,12 +97,14 @@ class FileComponent(DataTypeComponent):
         datatype.parent_record = parent_record_datatype
 
         parent_record_prefix = parent_record_datatype.definition["module"]["prefix"]
+        parent_record_alias = parent_record_datatype.definition["module"]["alias"]
 
         module = set_default(datatype, "module", {})
         module.setdefault(
             "qualified", parent_record_datatype.definition["module"]["qualified"]
         )
         module.setdefault("prefix", f"{parent_record_prefix}File")
+        module.setdefault("alias", f"{parent_record_alias}_file")
 
         record = set_default(datatype, "record", {})
         record.setdefault("class", f"{parent_record_prefix}File")
@@ -107,10 +117,7 @@ class FileComponent(DataTypeComponent):
         permissions.setdefault(
             "class", parent_record_datatype.definition["permissions"]["class"]
         )
-        set_default(datatype, "permissions", {}).setdefault("generate", False)
-
-        service_config = set_default(datatype, "service-config", {})
-        service_config.setdefault("generate-links", False)
+        permissions.setdefault("generate", False)
 
         resource_config = set_default(datatype, "resource-config", {})
         parent_record_url = parent_record_datatype.definition["resource-config"][
@@ -135,17 +142,18 @@ class FileComponent(DataTypeComponent):
         )
 
         service_config = set_default(datatype, "service-config", {})
-        service_config.setdefault("base-classes", ["FileServiceConfig"])
+        service_config.setdefault(
+            "base-classes", ["PermissionsPresetsConfigMixin", "FileServiceConfig"]
+        )
         service_config.setdefault(
             "imports",
             [
                 {"import": "invenio_records_resources.services.FileServiceConfig"},
                 {
-                    "import": "invenio_records_resources.services.records.components.FilesOptionsComponent"
+                    "import": "oarepo_runtime.config.service.PermissionsPresetsConfigMixin"
                 },
             ],
         )
-        service_config.setdefault("components", ["FilesOptionsComponent"])
 
         service = set_default(datatype, "service", {})
         service.setdefault("base-classes", ["FileService"])
@@ -163,3 +171,26 @@ class FileComponent(DataTypeComponent):
         set_default(datatype, "json-schema-settings", {}).setdefault("skip", True)
         set_default(datatype, "mapping-settings", {}).setdefault("skip", True)
         set_default(datatype, "record-dumper", {}).setdefault("skip", True)
+
+
+class FileMetadataComponent(DataTypeComponent):
+    eligible_datatypes = [ModelDataType]
+    depends_on = [RecordMetadataModelComponent]
+
+    def before_model_prepare(self, datatype, *, context, **kwargs):
+        if context["profile"] != "files":
+            return
+
+        place_after(
+            datatype,
+            "record-metadata",
+            "base-classes",
+            "db.Model",
+            "FileRecordModelMixin",
+        )
+        append_array(
+            datatype,
+            "record-metadata",
+            "imports",
+            {"import": "invenio_records_resources.records.FileRecordModelMixin"},
+        )

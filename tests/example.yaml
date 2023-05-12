@@ -8,6 +8,8 @@ record:
           type: keyword
   module:
     qualified: example
+  permissions:
+    presets: ['everyone']
   use:
     - invenio
 

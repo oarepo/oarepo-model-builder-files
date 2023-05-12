@@ -262,7 +262,7 @@ def test_disable_files_when_files_already_present_should_error(
     assert response.status_code == 400
     assert response.json["errors"] == [
         {
-            "field": "files['enabled']",
+            "field": "files.enabled",
             "messages": [
                 "You must first delete all files to set the record to be "
                 "metadata-only."
