@@ -1,3 +1,3 @@
-from .model import ModelFilesComponent
+from .file import FileDataType
 
-components = [ModelFilesComponent]
+file_datatypes = [FileDataType]
