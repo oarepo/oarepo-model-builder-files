@@ -42,7 +42,7 @@ class FileComponent(DataTypeComponent):
                     link_args=['"{self.url_prefix}{id}/files"'],
                     imports=[
                         Import(
-                            import_path="invenio_records_resources.services.RecordLink"
+                            import_path="invenio_records_resources.services.RecordLink" # NOSONAR
                         )
                     ],
                 )
@@ -65,7 +65,7 @@ class FileComponent(DataTypeComponent):
                     name="self",
                     link_class="FileLink",
                     link_args=['"{self.url_prefix}{id}/files/{key}"'],
-                    imports=[Import("invenio_records_resources.services.FileLink")],
+                    imports=[Import("invenio_records_resources.services.FileLink")], # NOSONAR
                 ),
                 Link(
                     name="content",

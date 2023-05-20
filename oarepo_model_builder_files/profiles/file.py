@@ -25,8 +25,8 @@ class FileProfile(RecordProfile):
         # allocated)
         parent_record = model.get_schema_section("record", model_path[:-1])
 
-        file = dict_get(model.schema, model_path)
-        file.setdefault("type", "file")
+        file_profile = dict_get(model.schema, model_path)
+        file_profile.setdefault("type", "file")
 
         # pass the parent record as an extra context item. This will be handled by file-aware
         # components in their "prepare" method
