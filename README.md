@@ -21,7 +21,7 @@ The api is taken from InvenioRDM, the docs are [here](https://inveniordm.docs.ce
 
 A simple record with associated files can be defined as this:
 ```yaml
-model:
+record:
   properties:
     metadata:
       properties:
@@ -29,8 +29,8 @@ model:
           type: fulltext
         status:
           type: keyword
-  package: thesis
-  schema-server: 'local://'
+  module:
+    name: thesis
   use:
     - invenio
 
@@ -40,10 +40,12 @@ files:
       properties:
         title:
           type: fulltext
-  package: thesis
-  schema-server: 'local://'
+  module:
+    name: thesis
   use:
     - invenio_files
+settings:
+  schema-server: 'local://'
 ```
 Using the api, first an
 instance of the model has to be created. Then an instance of the

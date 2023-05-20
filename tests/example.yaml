@@ -1,4 +1,4 @@
-model:
+record:
   properties:
     metadata:
       properties:
@@ -6,21 +6,24 @@ model:
           type: fulltext
         status:
           type: keyword
-  package: example
-  schema-server: 'local://'
+  module:
+    qualified: example
+  permissions:
+    presets: ['everyone']
   use:
     - invenio
 
-files:
-  properties:
-    metadata:
-      properties:
-        title:
-          type: fulltext
-  package: example
+  files:
+    properties:
+      metadata:
+        properties:
+          title:
+            type: fulltext
+    use:
+      - invenio_files
+
+settings:
   schema-server: 'local://'
-  use:
-    - invenio_files
 
 
 

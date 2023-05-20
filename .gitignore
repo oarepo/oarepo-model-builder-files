@@ -88,5 +88,4 @@ example_model/
 dist/
 .vscode/
 .model_venv
-/tests/test
-tests/example
+example-model
