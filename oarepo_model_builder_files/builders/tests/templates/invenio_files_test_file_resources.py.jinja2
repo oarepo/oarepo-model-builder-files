@@ -14,11 +14,11 @@ def test_files_api_flow(client_with_credentials, search_clear, headers, input_da
     res = client_with_credentials.post("{{ parent_record.resource_config.base_url }}", headers=headers, json=input_data)
     assert res.status_code == 201
     id_ = res.json["id"]
-    assert res.json["links"]["files"].endswith(f"{id_}/files")
+    assert res.json["links"]["files"].endswith(f"{id_}{{ test_constants.read_url }}/files")
 
     # Initialize files upload
     res = client_with_credentials.post(
-        f"{{ parent_record.resource_config.base_url }}{id_}/files", # todo - this won't work if the url is specified differently
+        f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.read_url }}/files", # todo - this won't work if the url is specified differently
         headers=headers,
         json=[
             {"key": "test.pdf", "title": "Test file"},
@@ -29,16 +29,16 @@ def test_files_api_flow(client_with_credentials, search_clear, headers, input_da
     assert res_file["key"] == "test.pdf"
     assert res_file["status"] == "pending"
     assert res_file["metadata"] == {"title": "Test file"}
-    assert res_file["links"]["self"].endswith(f"{id_}/files/test.pdf")
+    assert res_file["links"]["self"].endswith(f"{id_}{{ test_constants.read_url }}/files/test.pdf")
     assert res_file["links"]["content"].endswith(
-        f"files/test.pdf/content"
+        f"{{ test_constants.read_url }}/files/test.pdf/content"
     )
     assert res_file["links"]["commit"].endswith(
-        f"files/test.pdf/commit"
+        f"{{ test_constants.read_url }}/files/test.pdf/commit"
     )
 
     # Get the file metadata
-    res = client_with_credentials.get(f"{{ parent_record.resource_config.base_url }}{id_}/files/test.pdf", headers=headers)
+    res = client_with_credentials.get(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.read_url }}/files/test.pdf", headers=headers)
     assert res.status_code == 200
     assert res.json["key"] == "test.pdf"
     assert res.json["status"] == "pending"
@@ -46,7 +46,7 @@ def test_files_api_flow(client_with_credentials, search_clear, headers, input_da
 
     # Upload a file
     res = client_with_credentials.put(
-        f"{{ parent_record.resource_config.base_url }}{id_}/files/test.pdf/content",
+        f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.update_url }}/files/test.pdf/content",
         headers={
             "content-type": "application/octet-stream",
             "accept": "application/json",
@@ -57,12 +57,12 @@ def test_files_api_flow(client_with_credentials, search_clear, headers, input_da
     assert res.json["status"] == "pending"
 
     # Commit the uploaded file
-    res = client_with_credentials.post(f"{{ parent_record.resource_config.base_url }}{id_}/files/test.pdf/commit", headers=headers)
+    res = client_with_credentials.post(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.read_url }}/files/test.pdf/commit", headers=headers)
     assert res.status_code == 200
     assert res.json["status"] == "completed"
 
     # Get the file metadata
-    res = client_with_credentials.get(f"{{ parent_record.resource_config.base_url }}{id_}/files/test.pdf", headers=headers)
+    res = client_with_credentials.get(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.read_url }}/files/test.pdf", headers=headers)
     assert res.status_code == 200
     assert res.json["key"] == "test.pdf"
     assert res.json["status"] == "completed"
@@ -71,13 +71,13 @@ def test_files_api_flow(client_with_credentials, search_clear, headers, input_da
     assert isinstance(res.json["size"], int), "File size not integer"
 
     # Read a file's content
-    res = client_with_credentials.get(f"{{ parent_record.resource_config.base_url }}{id_}/files/test.pdf/content", headers=headers)
+    res = client_with_credentials.get(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.read_url }}/files/test.pdf/content", headers=headers)
     assert res.status_code == 200
     assert res.data == b"testfile"
 
     # Update file metadata
     res = client_with_credentials.put(
-        f"{{ parent_record.resource_config.base_url }}{id_}/files/test.pdf", headers=headers, json={"title": "New title"}
+        f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.update_url }}/files/test.pdf", headers=headers, json={"title": "New title"}
     )
     assert res.status_code == 200
     assert res.json["key"] == "test.pdf"
@@ -85,7 +85,7 @@ def test_files_api_flow(client_with_credentials, search_clear, headers, input_da
     assert res.json["metadata"] == {"title": "New title"}
 
     # Get all files
-    res = client_with_credentials.get(f"{{ parent_record.resource_config.base_url }}{id_}/files", headers=headers)
+    res = client_with_credentials.get(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.read_url }}/files", headers=headers)
     assert res.status_code == 200
     assert len(res.json["entries"]) == 1
     assert res.json["entries"][0]["key"] == "test.pdf"
@@ -93,11 +93,11 @@ def test_files_api_flow(client_with_credentials, search_clear, headers, input_da
     assert res.json["entries"][0]["metadata"] == {"title": "New title"}
 
     # Delete a file
-    res = client_with_credentials.delete(f"{{ parent_record.resource_config.base_url }}{id_}/files/test.pdf", headers=headers)
+    res = client_with_credentials.delete(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.delete_url }}/files/test.pdf", headers=headers)
     assert res.status_code == 204
 
     # Get all files
-    res = client_with_credentials.get(f"{{ parent_record.resource_config.base_url }}{id_}/files", headers=headers)
+    res = client_with_credentials.get(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.read_url }}/files", headers=headers)
     assert res.status_code == 200
     assert len(res.json["entries"]) == 0
 
@@ -106,11 +106,11 @@ def test_default_preview_file(app, client_with_credentials, search_clear, header
     res = client_with_credentials.post("{{ parent_record.resource_config.base_url }}", headers=headers, json=input_data)
     assert res.status_code == 201
     id_ = res.json["id"]
-    assert res.json["links"]["files"].endswith(f"{id_}/files")
+    assert res.json["links"]["files"].endswith(f"{id_}{{ test_constants.read_url }}/files")
 
     # Initialize 3 file uploads
     res = client_with_credentials.post(
-        f"{{ parent_record.resource_config.base_url }}{id_}/files",
+        f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.read_url }}/files",
         headers=headers,
         json=[
             {"key": "f1.pdf"},
@@ -131,7 +131,7 @@ def test_default_preview_file(app, client_with_credentials, search_clear, header
     # Upload and commit the 3 files
     for f in file_entries:
         res = client_with_credentials.put(
-            f"{{ parent_record.resource_config.base_url }}{id_}/files/{f['key']}/content",
+            f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.update_url }}/files/{f['key']}/content",
             headers={
                 "content-type": "application/octet-stream",
                 "accept": "application/json",
@@ -141,46 +141,46 @@ def test_default_preview_file(app, client_with_credentials, search_clear, header
         assert res.status_code == 200
         assert res.json["status"] == "pending"
 
-        res = client_with_credentials.post(f"{{ parent_record.resource_config.base_url }}{id_}/files/{f['key']}/commit", headers=headers)
+        res = client_with_credentials.post(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.read_url }}/files/{f['key']}/commit", headers=headers)
         assert res.status_code == 200
         assert res.json["status"] == "completed"
 
     # Set the default preview file
     input_data["files"]["default_preview"] = "f1.pdf"
-    res = client_with_credentials.put(f"{{ parent_record.resource_config.base_url }}{id_}", headers=headers, json=input_data)
+    res = client_with_credentials.put(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.update_url }}", headers=headers, json=input_data)
     assert res.status_code == 200
     assert res.json["files"]["default_preview"] == "f1.pdf"
 
     # Change the default preview file
     input_data["files"]["default_preview"] = "f2.pdf"
-    res = client_with_credentials.put(f"{{ parent_record.resource_config.base_url }}{id_}", headers=headers, json=input_data)
+    res = client_with_credentials.put(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.update_url }}", headers=headers, json=input_data)
     assert res.status_code == 200
     assert res.json["files"]["default_preview"] == "f2.pdf"
 
     # Unset the default preview file
     input_data["files"]["default_preview"] = None
-    res = client_with_credentials.put(f"{{ parent_record.resource_config.base_url }}{id_}", headers=headers, json=input_data)
+    res = client_with_credentials.put(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.update_url }}", headers=headers, json=input_data)
     assert res.status_code == 200
     assert res.json["files"].get("default_preview") is None
 
     # Empty string the default preview file
     input_data["files"]["default_preview"] = ""
-    res = client_with_credentials.put(f"{{ parent_record.resource_config.base_url }}{id_}", headers=headers, json=input_data)
+    res = client_with_credentials.put(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.update_url }}", headers=headers, json=input_data)
     assert res.status_code == 200
     assert res.json["files"].get("default_preview") is None
 
     # Set the default preview file
     input_data["files"]["default_preview"] = "f3.pdf"
-    res = client_with_credentials.put(f"{{ parent_record.resource_config.base_url }}{id_}", headers=headers, json=input_data)
+    res = client_with_credentials.put(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.update_url }}", headers=headers, json=input_data)
     assert res.status_code == 200
     assert res.json["files"]["default_preview"] == "f3.pdf"
 
     # Delete the default preview file
-    res = client_with_credentials.delete(f"{{ parent_record.resource_config.base_url }}{id_}/files/f3.pdf", headers=headers)
+    res = client_with_credentials.delete(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.delete_url }}/files/f3.pdf", headers=headers)
     assert res.status_code == 204
 
     # Get all files and check default preview
-    res = client_with_credentials.get(f"{{ parent_record.resource_config.base_url }}{id_}/files", headers=headers)
+    res = client_with_credentials.get(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.read_url }}/files", headers=headers)
     assert res.status_code == 200
     assert len(res.json["entries"]) == 2
     assert res.json["default_preview"] is None
@@ -193,15 +193,15 @@ def test_file_api_errors(client_with_credentials, search_clear, headers, input_d
     res = client_with_credentials.post("{{ parent_record.resource_config.base_url }}", headers=headers, json=input_data)
     assert res.status_code == 201
     id_ = res.json["id"]
-    assert res.json["links"]["files"].endswith(f"{id_}/files")
+    assert res.json["links"]["files"].endswith(f"{id_}{{ test_constants.read_url }}/files")
 
     # Initialize files upload
     # Pass an object instead of an array
-    res = client_with_credentials.post(f"{{ parent_record.resource_config.base_url }}{id_}/files", headers=headers, json={"key": "test.pdf"})
+    res = client_with_credentials.post(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.read_url }}/files", headers=headers, json={"key": "test.pdf"})
     assert res.status_code == 400
 
     res = client_with_credentials.post(
-        f"{{ parent_record.resource_config.base_url }}{id_}/files",
+        f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.read_url }}/files",
         headers=headers,
         json=[
             {"key": "test.pdf", "title": "Test file"},
@@ -211,7 +211,7 @@ def test_file_api_errors(client_with_credentials, search_clear, headers, input_d
 
     # Upload a file
     res = client_with_credentials.put(
-        f"{{ parent_record.resource_config.base_url }}{id_}/files/test.pdf/content",
+        f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.update_url }}/files/test.pdf/content",
         headers={
             "content-type": "application/octet-stream",
             "accept": "application/json",
@@ -222,13 +222,13 @@ def test_file_api_errors(client_with_credentials, search_clear, headers, input_d
     assert res.json["status"] == "pending"
 
     # Commit the uploaded file
-    res = client_with_credentials.post(f"{{ parent_record.resource_config.base_url }}{id_}/files/test.pdf/commit", headers=headers)
+    res = client_with_credentials.post(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.read_url }}/files/test.pdf/commit", headers=headers)
     assert res.status_code == 200
     assert res.json["status"] == "completed"
 
     # Initialize same file upload again
     res = client_with_credentials.post(
-        f"{{ parent_record.resource_config.base_url }}{id_}/files",
+        f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.read_url }}/files",
         headers=headers,
         json=[
             {"key": "test.pdf", "title": "Test file"},
@@ -244,20 +244,20 @@ def test_disable_files_when_files_already_present_should_error(
     id_ = response.json["id"]
     # Add file
     file_id = "f1.pdf"
-    client_with_credentials.post(f"{{ parent_record.resource_config.base_url }}{id_}/files", headers=headers, json=[{"key": file_id}])
+    client_with_credentials.post(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.read_url }}/files", headers=headers, json=[{"key": file_id}])
     client_with_credentials.put(
-        f"{{ parent_record.resource_config.base_url }}{id_}/files/{file_id}/content",
+        f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.update_url }}/files/{file_id}/content",
         headers={
             "content-type": "application/octet-stream",
             "accept": "application/json",
         },
         data=BytesIO(b"testfile"),
     )
-    client_with_credentials.post(f"{{ parent_record.resource_config.base_url }}{id_}/files/{file_id}/commit", headers=headers)
+    client_with_credentials.post(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.read_url }}/files/{file_id}/commit", headers=headers)
     # Disable files
     input_data["files"] = {"enabled": False}
 
-    response = client_with_credentials.put(f"{{ parent_record.resource_config.base_url }}{id_}", headers=headers, json=input_data)
+    response = client_with_credentials.put(f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.update_url }}", headers=headers, json=input_data)
 
     assert response.status_code == 400
     assert response.json["errors"] == [

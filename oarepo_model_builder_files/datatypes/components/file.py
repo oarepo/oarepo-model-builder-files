@@ -24,7 +24,6 @@ def get_file_schema():
 
     return FileDataType.validator()
 
-
 class FileComponent(DataTypeComponent):
     eligible_datatypes = [ModelDataType]
     affects = [DefaultsModelComponent]
@@ -33,22 +32,28 @@ class FileComponent(DataTypeComponent):
         files = ma.fields.Nested(get_file_schema)
 
     def process_links(self, datatype, section: Section, **kwargs):
-        if not self.is_file_profile:
+        if self.is_record_profile:
             # add files link item
-            section.config["links_item"].append(
-                Link(
-                    name="files",
-                    link_class="RecordLink",
-                    link_args=['"{self.url_prefix}{id}/files"'],
-                    imports=[
-                        Import(
-                            import_path="invenio_records_resources.services.RecordLink" # NOSONAR
-                        )
-                    ],
+            has_files = False
+            for link in section.config["links_item"]:
+                if link.name == "files":
+                    has_files = True
+            if not has_files:
+                section.config["links_item"].append(
+                    Link(
+                        name="files",
+                        link_class="RecordLink",
+                        link_args=['"{self.url_prefix}{id}/files"'],
+                        imports=[
+                            Import(
+                                import_path="invenio_records_resources.services.RecordLink" # NOSONAR
+                            )
+                        ],
+                    )
                 )
-            )
-        else:
-            section.config.pop("links_search")
+        if self.is_file_profile:
+            if "links_search" in section.config:
+                section.config.pop("links_search")
             # remove normal links and add
             section.config["file_links_list"] = [
                 Link(
@@ -89,6 +94,7 @@ class FileComponent(DataTypeComponent):
             ] = datatype.parent_record.definition["record"]["class"]
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
+        self.is_record_profile = context["profile"] == "record"
         self.is_file_profile = context["profile"] == "files"
         if not self.is_file_profile:
             return
@@ -167,6 +173,9 @@ class FileComponent(DataTypeComponent):
             process_pid_type(parent_record_datatype.definition["pid"]["type"] + "File"),
         )
 
+        record_metadata = set_default(datatype, "record-metadata", {})
+        record_metadata.setdefault("use-versioning", False)
+
         set_default(datatype, "search-options", {}).setdefault("skip", True)
         set_default(datatype, "json-schema-settings", {}).setdefault("skip", True)
         set_default(datatype, "mapping-settings", {}).setdefault("skip", True)
@@ -185,7 +194,7 @@ class FileMetadataComponent(DataTypeComponent):
             datatype,
             "record-metadata",
             "base-classes",
-            "db.Model",
+            "RecordMetadataBase",
             "FileRecordModelMixin",
         )
         append_array(

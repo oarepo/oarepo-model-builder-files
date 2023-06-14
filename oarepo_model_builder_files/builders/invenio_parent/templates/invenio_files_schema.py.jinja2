@@ -2,7 +2,7 @@ from marshmallow_utils.fields import SanitizedUnicode
 from marshmallow.utils import get_value
 
 class {{ parent_record.marshmallow|class_header }}:
-    files = ma_fields.Nested(lambda: FilesOptionsSchema(), load_default={'enabled': True})
+    files = ma.fields.Nested(lambda: FilesOptionsSchema(), load_default={'enabled': True})
 
     # todo this needs to be generated for [default preview] to work
     def get_attribute(self, obj, attr, default):
@@ -24,7 +24,7 @@ class {{ parent_record.marshmallow|class_header }}:
 class FilesOptionsSchema(ma.Schema):
     """Basic files options schema class."""
 
-    enabled = ma_fields.Bool(missing=True)
+    enabled = ma.fields.Bool(missing=True)
     # allow unsetting
     default_preview = SanitizedUnicode(allow_none=True)
 
