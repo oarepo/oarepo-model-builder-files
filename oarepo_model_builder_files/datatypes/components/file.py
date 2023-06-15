@@ -102,70 +102,12 @@ class FileComponent(DataTypeComponent):
         parent_record_datatype: DataType = context["parent_record"]
         datatype.parent_record = parent_record_datatype
 
-        parent_record_prefix = parent_record_datatype.definition["module"]["prefix"]
-        parent_record_alias = parent_record_datatype.definition["module"]["alias"]
-
-        module = set_default(datatype, "module", {})
-        module.setdefault(
-            "qualified", parent_record_datatype.definition["module"]["qualified"]
-        )
-        module.setdefault("prefix", f"{parent_record_prefix}File")
-        module.setdefault("alias", f"{parent_record_alias}_file")
-
-        record = set_default(datatype, "record", {})
-        record.setdefault("class", f"{parent_record_prefix}File")
-        record.setdefault("base-classes", ["FileRecord"])
-        record.setdefault(
-            "imports", [{"import": "invenio_records_resources.records.api.FileRecord"}]
-        )
-
         permissions = set_default(datatype, "permissions", {})
         permissions.setdefault(
             "class", parent_record_datatype.definition["permissions"]["class"]
         )
         permissions.setdefault("generate", False)
 
-        resource_config = set_default(datatype, "resource-config", {})
-        parent_record_url = parent_record_datatype.definition["resource-config"][
-            "base-url"
-        ]
-        resource_config.setdefault("base-url", f"{parent_record_url}<pid_value>")
-        resource_config.setdefault("base-classes", ["FileResourceConfig"])
-        resource_config.setdefault(
-            "imports",
-            [{"import": "invenio_records_resources.resources.FileResourceConfig"}],
-        )
-
-        resource = set_default(datatype, "resource", {})
-        resource.setdefault("base-classes", ["FileResource"])
-        resource.setdefault(
-            "imports",
-            [
-                {
-                    "import": "invenio_records_resources.resources.files.resource.FileResource"
-                }
-            ],
-        )
-
-        service_config = set_default(datatype, "service-config", {})
-        service_config.setdefault(
-            "base-classes", ["PermissionsPresetsConfigMixin", "FileServiceConfig"]
-        )
-        service_config.setdefault(
-            "imports",
-            [
-                {"import": "invenio_records_resources.services.FileServiceConfig"},
-                {
-                    "import": "oarepo_runtime.config.service.PermissionsPresetsConfigMixin"
-                },
-            ],
-        )
-
-        service = set_default(datatype, "service", {})
-        service.setdefault("base-classes", ["FileService"])
-        service.setdefault(
-            "imports", [{"import": "invenio_records_resources.services.FileService"}]
-        )
 
         pid = set_default(datatype, "pid", {})
         pid.setdefault(
@@ -173,15 +115,13 @@ class FileComponent(DataTypeComponent):
             process_pid_type(parent_record_datatype.definition["pid"]["type"] + "File"),
         )
 
-        record_metadata = set_default(datatype, "record-metadata", {})
-        record_metadata.setdefault("use-versioning", False)
 
         set_default(datatype, "search-options", {}).setdefault("skip", True)
         set_default(datatype, "json-schema-settings", {}).setdefault("skip", True)
         set_default(datatype, "mapping-settings", {}).setdefault("skip", True)
         set_default(datatype, "record-dumper", {}).setdefault("skip", True)
 
-
+"""
 class FileMetadataComponent(DataTypeComponent):
     eligible_datatypes = [ModelDataType]
     depends_on = [RecordMetadataModelComponent]
@@ -203,3 +143,4 @@ class FileMetadataComponent(DataTypeComponent):
             "imports",
             {"import": "invenio_records_resources.records.FileRecordModelMixin"},
         )
+"""
