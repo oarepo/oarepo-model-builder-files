@@ -117,6 +117,7 @@ class FileComponent(DataTypeComponent):
 
 
         set_default(datatype, "search-options", {}).setdefault("skip", True)
+        set_default(datatype, "facets", {}).setdefault("skip", True)
         set_default(datatype, "json-schema-settings", {}).setdefault("skip", True)
         set_default(datatype, "mapping-settings", {}).setdefault("skip", True)
         set_default(datatype, "record-dumper", {}).setdefault("skip", True)
