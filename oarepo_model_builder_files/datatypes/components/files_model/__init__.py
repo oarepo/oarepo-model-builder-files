@@ -1,3 +1,4 @@
+from oarepo_model_builder_files.datatypes.components.files_model.ext_resource import FilesExtResourceModelComponent
 from oarepo_model_builder_files.datatypes.components.files_model.record import FilesRecordModelComponent
 from oarepo_model_builder_files.datatypes.components.files_model.record_metadata import \
     FilesRecordMetadataModelComponent
@@ -11,5 +12,6 @@ __all__ = [
     "FilesRecordMetadataModelComponent",
     "FilesResourceModelComponent",
     "FilesServiceModelComponent",
+    "FilesExtResourceModelComponent",
 ]
 

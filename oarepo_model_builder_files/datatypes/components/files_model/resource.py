@@ -19,8 +19,6 @@ class FilesResourceModelComponent(ResourceModelComponent):
             "imports",
             [{"import": "invenio_records_resources.resources.FileResourceConfig"}],
         )
-        super().before_model_prepare(datatype, context=context, **kwargs)
-
         resource = set_default(datatype, "resource", {})
         resource.setdefault("base-classes", ["FileResource"])
         resource.setdefault(
@@ -31,3 +29,6 @@ class FilesResourceModelComponent(ResourceModelComponent):
                 }
             ],
         )
+        
+        super().before_model_prepare(datatype, context=context, **kwargs)
+
