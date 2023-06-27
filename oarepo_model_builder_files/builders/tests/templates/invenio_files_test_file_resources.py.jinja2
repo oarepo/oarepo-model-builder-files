@@ -18,7 +18,7 @@ def test_files_api_flow(client_with_credentials, search_clear, headers, input_da
 
     # Initialize files upload
     res = client_with_credentials.post(
-        f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.read_url }}/files", # todo - this won't work if the url is specified differently
+        f"{{ parent_record.resource_config.base_url }}{id_}{{ test_constants.read_url }}/files",
         headers=headers,
         json=[
             {"key": "test.pdf", "title": "Test file"},

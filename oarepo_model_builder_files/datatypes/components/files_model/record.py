@@ -1,13 +1,13 @@
 from oarepo_model_builder.datatypes import DataType
 from oarepo_model_builder.datatypes.components import RecordModelComponent
 from oarepo_model_builder.datatypes.components.model.utils import set_default
+
 from oarepo_model_builder_files.datatypes import FileDataType
 
 
 class FilesRecordModelComponent(RecordModelComponent):
     eligible_datatypes = [FileDataType]
     dependency_remap = RecordModelComponent
-
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
         parent_record_datatype: DataType = context["parent_record"]

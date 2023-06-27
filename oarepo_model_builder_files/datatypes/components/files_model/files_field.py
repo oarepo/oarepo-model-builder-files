@@ -1,13 +1,9 @@
-import re
-
 import marshmallow as ma
-
 from oarepo_model_builder.datatypes import DataTypeComponent, ModelDataType
-from oarepo_model_builder.utils.python_name import parent_module, base_name
-from oarepo_model_builder.validation.utils import ImportSchema
-from oarepo_model_builder.datatypes.components.model.utils import set_default
-
 from oarepo_model_builder.datatypes.components import RecordModelComponent
+from oarepo_model_builder.datatypes.components.model.utils import set_default
+from oarepo_model_builder.utils.python_name import base_name
+from oarepo_model_builder.validation.utils import ImportSchema
 
 
 class FilesFieldSchema(ma.Schema):
@@ -44,12 +40,11 @@ class FilesFieldModelComponent(DataTypeComponent):
             FilesFieldSchema,
             attribute="files-field",
             data_key="files-field",
-            metadata={"doc": "Files field settings"}
+            metadata={"doc": "Files field settings"},
         )
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
         file_record = datatype.definition["record"]
-
 
         files_field = set_default(datatype, "files-field", {})
         files_field.setdefault("generate", True)
@@ -59,11 +54,7 @@ class FilesFieldModelComponent(DataTypeComponent):
         files_field.setdefault(
             "imports",
             [
-                {
-                    "import": "invenio_records_resources.records.systemfields.FilesField"
-                },
-                {
-                    "import": file_record["class"]
-                },
+                {"import": "invenio_records_resources.records.systemfields.FilesField"},
+                {"import": file_record["class"]},
             ],
         )

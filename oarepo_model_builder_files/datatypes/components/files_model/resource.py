@@ -1,7 +1,9 @@
 from oarepo_model_builder.datatypes import DataType
-from oarepo_model_builder.datatypes.components import RecordModelComponent, ResourceModelComponent
+from oarepo_model_builder.datatypes.components import ResourceModelComponent
 from oarepo_model_builder.datatypes.components.model.utils import set_default
+
 from oarepo_model_builder_files.datatypes import FileDataType
+
 
 class FilesResourceModelComponent(ResourceModelComponent):
     eligible_datatypes = [FileDataType]
@@ -29,6 +31,5 @@ class FilesResourceModelComponent(ResourceModelComponent):
                 }
             ],
         )
-        
-        super().before_model_prepare(datatype, context=context, **kwargs)
 
+        super().before_model_prepare(datatype, context=context, **kwargs)

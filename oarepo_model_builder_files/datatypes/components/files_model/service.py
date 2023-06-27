@@ -1,8 +1,8 @@
-from oarepo_model_builder.datatypes import DataType
-from oarepo_model_builder.datatypes.components import RecordModelComponent, ResourceModelComponent, \
-    ServiceModelComponent
+from oarepo_model_builder.datatypes.components import ServiceModelComponent
 from oarepo_model_builder.datatypes.components.model.utils import set_default
+
 from oarepo_model_builder_files.datatypes import FileDataType
+
 
 class FilesServiceModelComponent(ServiceModelComponent):
     eligible_datatypes = [FileDataType]

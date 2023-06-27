@@ -1,4 +1,3 @@
-import marshmallow as ma
 from oarepo_model_builder.datatypes import DataTypeComponent, ModelDataType
 from oarepo_model_builder_tests.datatypes.components import ModelTestComponent
 
@@ -9,6 +8,4 @@ class FilesModelTestComponent(DataTypeComponent):
 
     def process_files_tests(self, datatype, section, **extra_kwargs):
         section.fixtures = {}
-        section.constants = {
-            "skip_continous_disable_files_test": False
-        }
+        section.constants = {"skip_continous_disable_files_test": False}
