@@ -19,7 +19,7 @@ class ParentRecordComponent(DataTypeComponent):
     ]
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
-        if context["profile"] == "files":
+        if context["profile"] != "record":
             return
         prepend_array(datatype, "record-metadata", "base-classes", "RecordMetadataBase")
         prepend_array(datatype, "record-metadata", "base-classes", "db.Model")
