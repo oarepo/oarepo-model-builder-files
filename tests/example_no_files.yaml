@@ -1,0 +1,20 @@
+record:
+  properties:
+    metadata:
+      properties:
+        title:
+          type: fulltext
+        status:
+          type: keyword
+  module:
+    qualified: example_no_files
+  permissions:
+    presets: ['everyone']
+  use:
+    - invenio
+
+settings:
+  schema-server: 'local://'
+
+
+

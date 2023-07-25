@@ -26,6 +26,9 @@ class FileComponent(DataTypeComponent):
 
     def process_links(self, datatype, section: Section, **kwargs):
         if self.is_record_profile:
+            has_files = 'files' in datatype.definition
+            if not has_files:
+                return
             # add files link item
             has_files = False
             for link in section.config["links_item"]:

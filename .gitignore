@@ -89,3 +89,4 @@ dist/
 .vscode/
 .model_venv
 example-model
+example-model-no-files

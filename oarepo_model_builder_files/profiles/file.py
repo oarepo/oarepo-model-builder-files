@@ -24,6 +24,8 @@ class FileProfile(RecordProfile):
         # on the record and will take some time (no files will be generated, only class names
         # allocated)
         parent_record = model.get_schema_section("record", model_path[:-1])
+        if 'files' not in parent_record.definition:
+            return
 
         file_profile = dict_get(model.schema, model_path)
         file_profile.setdefault("type", "file")
