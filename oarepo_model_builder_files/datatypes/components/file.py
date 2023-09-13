@@ -25,6 +25,7 @@ class FileComponent(DataTypeComponent):
         files = ma.fields.Nested(get_file_schema)
 
     def process_links(self, datatype, section: Section, **kwargs):
+        url_prefix = datatype.definition["resource-config"]["base-url"].replace("<pid_value>", "{id}/")
         if self.is_record_profile:
             has_files = 'files' in datatype.definition
             if not has_files:
@@ -39,7 +40,7 @@ class FileComponent(DataTypeComponent):
                     Link(
                         name="files",
                         link_class="RecordLink",
-                        link_args=['"{self.url_prefix}{id}/files"'],
+                        link_args=[f'"{{+api}}{url_prefix}{{id}}/files"'],
                         imports=[
                             Import(
                                 import_path="invenio_records_resources.services.RecordLink"  # NOSONAR
@@ -55,7 +56,7 @@ class FileComponent(DataTypeComponent):
                 Link(
                     name="self",
                     link_class="RecordLink",
-                    link_args=['"{self.url_prefix}{id}/files"'],
+                    link_args=[f'"{{+api}}{url_prefix}files"'],
                     imports=[Import("invenio_records_resources.services.RecordLink")],
                 ),
             ]
@@ -65,7 +66,7 @@ class FileComponent(DataTypeComponent):
                 Link(
                     name="self",
                     link_class="FileLink",
-                    link_args=['"{self.url_prefix}{id}/files/{key}"'],
+                    link_args=[f'"{{+api}}{url_prefix}files/{{key}}"'],
                     imports=[
                         Import("invenio_records_resources.services.FileLink")
                     ],  # NOSONAR
@@ -73,13 +74,13 @@ class FileComponent(DataTypeComponent):
                 Link(
                     name="content",
                     link_class="FileLink",
-                    link_args=['"{self.url_prefix}{id}/files/{key}/content"'],
+                    link_args=[f'"{{+api}}{url_prefix}files/{{key}}/content"'],
                     imports=[Import("invenio_records_resources.services.FileLink")],
                 ),
                 Link(
                     name="commit",
                     link_class="FileLink",
-                    link_args=['"{self.url_prefix}{id}/files/{key}/commit"'],
+                    link_args=[f'"{{+api}}{url_prefix}files/{{key}}/commit"'],
                     imports=[Import("invenio_records_resources.services.FileLink")],
                 ),
             ]
