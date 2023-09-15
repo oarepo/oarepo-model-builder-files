@@ -25,16 +25,27 @@ class FileComponent(DataTypeComponent):
         files = ma.fields.Nested(get_file_schema)
 
     def process_links(self, datatype, section: Section, **kwargs):
-        url_prefix = datatype.definition["resource-config"]["base-url"].replace("<pid_value>", "{id}")
-        if url_prefix[-1] != "/":
-            url_prefix += "/"
+        def add_backslah_if_missing(url):
+            if url[-1] != "/":
+                url += "/"
+            return url
+
+        url_prefix = add_backslah_if_missing(
+            datatype.definition["resource-config"]["base-url"].replace(
+                "<pid_value>", "{id}"
+            )
+        )
 
         if self.is_record_profile:
-            has_files = 'files' in datatype.definition
+            has_files = "files" in datatype.definition
             if not has_files:
                 return
             try:
-                files_url_prefix = datatype.definition["files"]["resource-config"]["base-url"]
+                files_url_prefix = add_backslah_if_missing(
+                    datatype.definition["files"]["resource-config"]["base-url"].replace(
+                        "<pid_value>", "{id}"
+                    )
+                )
             except KeyError:
                 files_url_prefix = f"{url_prefix}{{id}}/"
             # add files link item

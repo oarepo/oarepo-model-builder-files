@@ -22,7 +22,7 @@ class ParentRecordComponent(DataTypeComponent):
         if context["profile"] != "record":
             return
         # have files plugin in virtualenv but there are no files in the record
-        if 'files' not in datatype.definition:
+        if "files" not in datatype.definition:
             return
         prepend_array(datatype, "record-metadata", "base-classes", "RecordMetadataBase")
         prepend_array(datatype, "record-metadata", "base-classes", "db.Model")
