@@ -25,22 +25,30 @@ class FileComponent(DataTypeComponent):
         files = ma.fields.Nested(get_file_schema)
 
     def process_links(self, datatype, section: Section, **kwargs):
-        url_prefix = datatype.definition["resource-config"]["base-url"].replace("<pid_value>", "{id}/")
+        url_prefix = datatype.definition["resource-config"]["base-url"].replace("<pid_value>", "{id}")
+        if url_prefix[-1] != "/":
+            url_prefix += "/"
+
         if self.is_record_profile:
             has_files = 'files' in datatype.definition
             if not has_files:
                 return
+            try:
+                files_url_prefix = datatype.definition["files"]["resource-config"]["base-url"]
+            except KeyError:
+                files_url_prefix = f"{url_prefix}{{id}}/"
             # add files link item
             has_files = False
             for link in section.config["links_item"]:
                 if link.name == "files":
                     has_files = True
             if not has_files:
+                # todo these should actually refer to file resource url prefixe
                 section.config["links_item"].append(
                     Link(
                         name="files",
                         link_class="RecordLink",
-                        link_args=[f'"{{+api}}{url_prefix}{{id}}/files"'],
+                        link_args=[f'"{{+api}}{files_url_prefix}files"'],
                         imports=[
                             Import(
                                 import_path="invenio_records_resources.services.RecordLink"  # NOSONAR
