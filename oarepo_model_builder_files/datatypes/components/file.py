@@ -9,6 +9,7 @@ from oarepo_model_builder.datatypes import (
 from oarepo_model_builder.datatypes.components import DefaultsModelComponent
 from oarepo_model_builder.datatypes.components.model.utils import set_default
 from oarepo_model_builder.datatypes.model import Link
+from oarepo_model_builder.utils.links import url_prefix2link
 
 
 def get_file_schema():
@@ -25,26 +26,15 @@ class FileComponent(DataTypeComponent):
         files = ma.fields.Nested(get_file_schema)
 
     def process_links(self, datatype, section: Section, **kwargs):
-        def add_backslah_if_missing(url):
-            if url[-1] != "/":
-                url += "/"
-            return url
-
-        url_prefix = add_backslah_if_missing(
-            datatype.definition["resource-config"]["base-url"].replace(
-                "<pid_value>", "{id}"
-            )
-        )
+        url_prefix = url_prefix2link(datatype.definition["resource-config"]["base-url"])
 
         if self.is_record_profile:
             has_files = "files" in datatype.definition
             if not has_files:
                 return
             try:
-                files_url_prefix = add_backslah_if_missing(
-                    datatype.definition["files"]["resource-config"]["base-url"].replace(
-                        "<pid_value>", "{id}"
-                    )
+                files_url_prefix = url_prefix2link(
+                    datatype.definition["files"]["resource-config"]["base-url"]
                 )
             except KeyError:
                 files_url_prefix = f"{url_prefix}{{id}}/"
