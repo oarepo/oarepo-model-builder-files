@@ -18,5 +18,5 @@ class FilesModelTestComponent(DataTypeComponent):
                 "self": "https://{site_hostname}/api{BASE_URL_FILES.replace('{id}', id_)}/files/test.pdf",
                 "content": "https://{site_hostname}/api{BASE_URL_FILES.replace('{id}', id_)}/files/test.pdf/content",
                 "commit": "https://{site_hostname}/api{BASE_URL_FILES.replace('{id}', id_)}/files/test.pdf/commit",
-            }
+            },
         }
