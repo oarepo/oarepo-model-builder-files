@@ -1,7 +1,7 @@
 from io import BytesIO
 import pytest
 {{ vars.resource_config.class|generate_import }}
-{{ parent_record.resource_config.class|generate_import }}
+{{ metadata_record.resource_config.class|generate_import }}
 
 
 
@@ -11,7 +11,7 @@ def input_data(input_data):
     return input_data
 
 BASE_URL_FILES = {{ vars.resource_config.class|base_name }}.url_prefix.replace({% raw %}"<pid_value>"{% endraw %}, "{id}")
-BASE_URL = {{ parent_record.resource_config.class|base_name }}.url_prefix
+BASE_URL = {{ metadata_record.resource_config.class|base_name }}.url_prefix
 
 def test_files_api_flow(client_with_credentials, search_clear, headers, input_data, base_url_files={{ test_constants.files_base_url_placeholder }}):
     """Test record creation."""

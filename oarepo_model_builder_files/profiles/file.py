@@ -39,7 +39,7 @@ class FileProfile(RecordProfile):
             output_directory=output_directory,
             builder=builder,
             context={
-                "parent_record": parent_record,
+                "published_record": parent_record,
                 "profile": "files",
                 "profile_module": "files",
             },

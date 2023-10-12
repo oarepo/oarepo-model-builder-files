@@ -22,8 +22,13 @@ record:
     use:
       - invenio_files
 
+profiles:
+  - record
+  - files
+
 settings:
   schema-server: 'local://'
+
 
 
 

@@ -28,7 +28,7 @@ class FileComponent(DataTypeComponent):
     def process_links(self, datatype, section: Section, **kwargs):
         url_prefix = url_prefix2link(datatype.definition["resource-config"]["base-url"])
 
-        if self.is_record_profile:
+        if datatype.root.profile == "record":
             has_files = "files" in datatype.definition
             if not has_files:
                 return
@@ -57,7 +57,7 @@ class FileComponent(DataTypeComponent):
                         ],
                     )
                 )
-        if self.is_file_profile:
+        if datatype.root.profile == "files":
             if "links_search" in section.config:
                 section.config.pop("links_search")
             # remove normal links and add
@@ -95,19 +95,17 @@ class FileComponent(DataTypeComponent):
             ]
 
     def process_mb_invenio_record_service_config(self, *, datatype, section, **kwargs):
-        if self.is_file_profile:
+        if datatype.root.profile == "files":
             # override class as it has to be a parent class
             section.config.setdefault("record", {})[
                 "class"
             ] = datatype.parent_record.definition["record"]["class"]
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
-        self.is_record_profile = context["profile"] == "record"
-        self.is_file_profile = context["profile"] == "files"
-        if not self.is_file_profile:
+        if not datatype.root.profile == "files":
             return
 
-        parent_record_datatype: DataType = context["parent_record"]
+        parent_record_datatype: DataType = context["published_record"]
         datatype.parent_record = parent_record_datatype
 
         set_default(datatype, "search-options", {}).setdefault("skip", True)

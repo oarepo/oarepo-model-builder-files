@@ -3,6 +3,7 @@ from oarepo_model_builder.datatypes.components import ResourceModelComponent
 from oarepo_model_builder.datatypes.components.model.utils import set_default
 
 from oarepo_model_builder_files.datatypes import FileDataType
+from ..utils import get_metadata_record
 
 
 class FilesResourceModelComponent(ResourceModelComponent):
@@ -10,7 +11,7 @@ class FilesResourceModelComponent(ResourceModelComponent):
     dependency_remap = ResourceModelComponent
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
-        parent_record_datatype: DataType = context["parent_record"]
+        parent_record_datatype = get_metadata_record(datatype, context)
         resource_config = set_default(datatype, "resource-config", {})
         parent_record_url = parent_record_datatype.definition["resource-config"][
             "base-url"
