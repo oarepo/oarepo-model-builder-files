@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-BUILDER_VENV=.venv
+BUILDER_VENV=venv
 if test -d $BUILDER_VENV ; then
 	rm -rf $BUILDER_VENV
 fi

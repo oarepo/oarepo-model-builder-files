@@ -13,5 +13,5 @@ class FileDataType(ModelDataType):
         )
 
     def prepare(self, context):
-        self.parent_record = context["parent_record"]
+        self.published_record = context["published_record"]
         super().prepare(context)

@@ -19,14 +19,13 @@ class FilesExtResourceModelComponent(DataTypeComponent):
         )
 
     def process_ext_resource(self, datatype, section, **kwargs):
-        if self.is_files_profile:
+        if datatype.root.profile == "files":
             cfg = section.config
             cfg["ext-service-name"] = "service_files"
             cfg["ext-resource-name"] = "resource_files"
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
-        self.is_files_profile = context["profile"] == "files"
-        if not self.is_files_profile:
+        if datatype.root.profile != "files":
             return
         ext = set_default(datatype, "ext-resource", {})
 
