@@ -48,13 +48,12 @@ class FilesFieldModelComponent(DataTypeComponent):
 
         files_field = set_default(datatype, "files-field", {})
         files_field.setdefault("generate", True)
-        files_field.setdefault("field-class", "FilesField")
-        files_field.setdefault("file-class", base_name(file_record["class"]))
+        files_field.setdefault(
+            "field-class", "invenio_records_resources.records.systemfields.FilesField"
+        )
+        files_field.setdefault("file-class", file_record["class"])
         files_field.setdefault("field-args", ["store=False"])
         files_field.setdefault(
             "imports",
-            [
-                {"import": "invenio_records_resources.records.systemfields.FilesField"},
-                {"import": file_record["class"]},
-            ],
+            [],
         )

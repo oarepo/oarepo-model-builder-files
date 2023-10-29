@@ -1,5 +1,5 @@
 from invenio_records_resources.services.files.generators import AnyUserIfFileIsLocal
-{{ vars.permissions.imports|generate_import }}
+{{ vars.permissions|imports }}
 
 class {{ vars.permissions|class_header }}:
     # defined in profiles, here just for information

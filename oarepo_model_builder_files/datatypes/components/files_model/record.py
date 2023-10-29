@@ -16,8 +16,8 @@ class FilesRecordModelComponent(RecordModelComponent):
 
         record = set_default(datatype, "record", {})
         record.setdefault("class", f"{parent_record_prefix}File")
-        record.setdefault("base-classes", ["FileRecord"])
         record.setdefault(
-            "imports", [{"import": "invenio_records_resources.records.api.FileRecord"}]
+            "base-classes", ["invenio_records_resources.records.api.FileRecord"]
         )
+        record.setdefault("imports", [])
         super().before_model_prepare(datatype, context=context, **kwargs)

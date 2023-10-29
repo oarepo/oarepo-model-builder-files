@@ -17,20 +17,15 @@ class FilesResourceModelComponent(ResourceModelComponent):
             "base-url"
         ]
         resource_config.setdefault("base-url", f"{parent_record_url}<pid_value>")
-        resource_config.setdefault("base-classes", ["FileResourceConfig"])
         resource_config.setdefault(
-            "imports",
-            [{"import": "invenio_records_resources.resources.FileResourceConfig"}],
+            "base-classes", ["invenio_records_resources.resources.FileResourceConfig"]
         )
+        resource_config.setdefault("imports", [])
         resource = set_default(datatype, "resource", {})
-        resource.setdefault("base-classes", ["FileResource"])
         resource.setdefault(
-            "imports",
-            [
-                {
-                    "import": "invenio_records_resources.resources.files.resource.FileResource"
-                }
-            ],
+            "base-classes",
+            ["invenio_records_resources.resources.files.resource.FileResource"],
         )
+        resource.setdefault("imports", [])
 
         super().before_model_prepare(datatype, context=context, **kwargs)
