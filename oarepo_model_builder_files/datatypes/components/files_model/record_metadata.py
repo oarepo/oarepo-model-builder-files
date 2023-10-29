@@ -20,12 +20,6 @@ class FilesRecordMetadataModelComponent(RecordMetadataModelComponent):
             datatype,
             "record-metadata",
             "base-classes",
-            "RecordMetadataBase",
-            "FileRecordModelMixin",
-        )
-        append_array(
-            datatype,
-            "record-metadata",
-            "imports",
-            {"import": "invenio_records_resources.records.FileRecordModelMixin"},
+            "invenio_records.models.RecordMetadataBase",
+            "invenio_records_resources.records.FileRecordModelMixin",
         )

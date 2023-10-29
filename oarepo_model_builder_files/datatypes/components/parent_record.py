@@ -24,28 +24,19 @@ class ParentRecordComponent(DataTypeComponent):
         # have files plugin in virtualenv but there are no files in the record
         if "files" not in datatype.definition:
             return
-        prepend_array(datatype, "record-metadata", "base-classes", "RecordMetadataBase")
-        prepend_array(datatype, "record-metadata", "base-classes", "db.Model")
-
-        append_array(
+        prepend_array(
             datatype,
             "record-metadata",
-            "imports",
-            {"import": "invenio_db.db"},
+            "base-classes",
+            "invenio_records.models.RecordMetadataBase",
         )
-        append_array(
-            datatype,
-            "record-metadata",
-            "imports",
-            {"import": "invenio_records.models.RecordMetadataBase"},
+        prepend_array(
+            datatype, "record-metadata", "base-classes", "invenio_db.db{db.Model}"
         )
 
         append_array(
             datatype,
             "service-config",
-            "imports",
-            {
-                "import": "invenio_records_resources.services.records.components.FilesOptionsComponent"
-            },
+            "components",
+            "invenio_records_resources.services.records.components.FilesOptionsComponent",
         )
-        append_array(datatype, "service-config", "components", "FilesOptionsComponent")

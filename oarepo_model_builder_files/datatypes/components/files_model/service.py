@@ -11,21 +11,17 @@ class FilesServiceModelComponent(ServiceModelComponent):
     def before_model_prepare(self, datatype, *, context, **kwargs):
         service_config = set_default(datatype, "service-config", {})
         service_config.setdefault(
-            "base-classes", ["PermissionsPresetsConfigMixin", "FileServiceConfig"]
-        )
-        service_config.setdefault(
-            "imports",
+            "base-classes",
             [
-                {"import": "invenio_records_resources.services.FileServiceConfig"},
-                {
-                    "import": "oarepo_runtime.config.service.PermissionsPresetsConfigMixin"
-                },
+                "oarepo_runtime.config.service.PermissionsPresetsConfigMixin",
+                "invenio_records_resources.services.FileServiceConfig",
             ],
         )
+        service_config.setdefault("imports", [])
 
         service = set_default(datatype, "service", {})
-        service.setdefault("base-classes", ["FileService"])
         service.setdefault(
-            "imports", [{"import": "invenio_records_resources.services.FileService"}]
+            "base-classes", ["invenio_records_resources.services.FileService"]
         )
+        service.setdefault("imports", [])
         super().before_model_prepare(datatype, context=context, **kwargs)

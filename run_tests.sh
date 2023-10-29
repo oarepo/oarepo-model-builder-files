@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+OAREPO_VERSION=${OAREPO_VERSION:-11}
+OAREPO_VERSION_MAX=$((OAREPO_VERSION+1))
+
 BUILDER_VENV=venv
 if test -d $BUILDER_VENV ; then
 	rm -rf $BUILDER_VENV
@@ -24,6 +27,7 @@ oarepo-compile-model ./tests/example.yaml --output-directory ./tests/example-mod
 python3 -m venv $VENV
 . $VENV/bin/activate
 pip install -U setuptools pip wheel
+pip install "oarepo>=$OAREPO_VERSION,<$OAREPO_VERSION_MAX"
 pip install "./tests/example-model[tests]"
 pytest tests/example-model/tests
 
@@ -42,5 +46,6 @@ oarepo-compile-model ./tests/example_no_files.yaml --output-directory ./tests/ex
 python3 -m venv $VENV
 . $VENV/bin/activate
 pip install -U setuptools pip wheel
+pip install "oarepo>=$OAREPO_VERSION,<$OAREPO_VERSION_MAX"
 pip install "./tests/example-model-no-files[tests]"
 pytest tests/example-model-no-files/tests
