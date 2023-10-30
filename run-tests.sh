@@ -4,7 +4,7 @@ set -e
 OAREPO_VERSION=${OAREPO_VERSION:-11}
 OAREPO_VERSION_MAX=$((OAREPO_VERSION+1))
 
-BUILDER_VENV=.venv
+BUILDER_VENV=".venv-builder"
 if test -d $BUILDER_VENV ; then
 	rm -rf $BUILDER_VENV
 fi
@@ -14,18 +14,19 @@ python3 -m venv $BUILDER_VENV
 pip install -U setuptools pip wheel
 pip install -e .
 
-VENV=".model_venv"
+VENV_TESTS=".venv-tests"
 
 if test -d tests/example-model; then
 	rm -rf tests/example-model
 fi
-if test -d $VENV ; then
-	rm -rf $VENV
+if test -d $VENV_TESTS ; then
+	rm -rf $VENV_TESTS
 fi
 
 oarepo-compile-model ./tests/example.yaml --output-directory ./tests/example-model --profile record,files -vvv
-python3 -m venv $VENV
-. $VENV/bin/activate
+
+python3 -m venv $VENV_TESTS
+. $VENV_TESTS/bin/activate
 pip install -U setuptools pip wheel
 pip install "oarepo>=$OAREPO_VERSION,<$OAREPO_VERSION_MAX"
 pip install "./tests/example-model[tests]"
@@ -36,15 +37,15 @@ pytest tests/example-model/tests
 if test -d tests/example-model-no-files ; then
 	rm -rf tests/example-model-no-files
 fi
-if test -d $VENV ; then
-	rm -rf $VENV
+if test -d $VENV_TESTS ; then
+	rm -rf $VENV_TESTS
 fi
 
 . $BUILDER_VENV/bin/activate
 
 oarepo-compile-model ./tests/example_no_files.yaml --output-directory ./tests/example-model-no-files --profile record -vvv
-python3 -m venv $VENV
-. $VENV/bin/activate
+python3 -m venv $VENV_TESTS
+. $VENV_TESTS/bin/activate
 pip install -U setuptools pip wheel
 pip install "oarepo>=$OAREPO_VERSION,<$OAREPO_VERSION_MAX"
 pip install "./tests/example-model-no-files[tests]"
