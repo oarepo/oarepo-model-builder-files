@@ -38,5 +38,5 @@ class ParentRecordComponent(DataTypeComponent):
             datatype,
             "service-config",
             "components",
-            "invenio_records_resources.services.records.components.FilesOptionsComponent",
+            "{{invenio_records_resources.services.records.components.FilesOptionsComponent}}",
         )
