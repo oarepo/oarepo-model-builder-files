@@ -1,6 +1,5 @@
 from oarepo_model_builder.datatypes.components import RecordMetadataModelComponent
 from oarepo_model_builder.datatypes.components.model.utils import (
-    append_array,
     place_after,
     set_default,
 )
