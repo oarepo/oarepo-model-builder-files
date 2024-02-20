@@ -2,7 +2,6 @@ import marshmallow as ma
 from oarepo_model_builder.datatypes import DataTypeComponent, ModelDataType
 from oarepo_model_builder.datatypes.components import RecordModelComponent
 from oarepo_model_builder.datatypes.components.model.utils import set_default
-from oarepo_model_builder.utils.python_name import base_name
 from oarepo_model_builder.validation.utils import ImportSchema
 
 

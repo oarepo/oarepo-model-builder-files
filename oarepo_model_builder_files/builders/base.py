@@ -10,6 +10,4 @@ class BaseBuilder(InvenioBaseClassPythonBuilder):
             metadata_record = "draft_record"
         metadata_record = getattr(self.current_model, metadata_record)
         metadata_record = metadata_record.definition
-        super().finish(
-            metadata_record=metadata_record, **extra_kwargs
-        )
+        super().finish(metadata_record=metadata_record, **extra_kwargs)
