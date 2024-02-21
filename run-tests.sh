@@ -2,26 +2,26 @@
 set -e
 
 OAREPO_VERSION=${OAREPO_VERSION:-11}
-
 BUILDER_VENV=".venv-builder"
+VENV_TESTS=".venv-tests"
+
 if test -d $BUILDER_VENV ; then
 	rm -rf $BUILDER_VENV
 fi
+
+if test -d $VENV_TESTS ; then
+	rm -rf $VENV_TESTS
+fi
+
 
 python3 -m venv $BUILDER_VENV
 . $BUILDER_VENV/bin/activate
 pip install -U setuptools pip wheel
 pip install -e .
 
-VENV_TESTS=".venv-tests"
-
 if test -d tests/example-model; then
 	rm -rf tests/example-model
 fi
-if test -d $VENV_TESTS ; then
-	rm -rf $VENV_TESTS
-fi
-
 oarepo-compile-model ./tests/example.yaml --output-directory ./tests/example-model --profile record,files -vvv
 
 python3 -m venv $VENV_TESTS

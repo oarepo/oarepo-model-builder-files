@@ -94,3 +94,5 @@ example-model-no-files
 .venv-builder
 .venv-tests
 
+example/
+
