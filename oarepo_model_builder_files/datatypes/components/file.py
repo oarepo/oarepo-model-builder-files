@@ -11,6 +11,7 @@ from oarepo_model_builder.datatypes.model import Link
 from oarepo_model_builder.utils.links import url_prefix2link
 from oarepo_model_builder.utils.python_name import Import
 
+
 def get_file_schema():
     from ..file import FileDataType
 
@@ -96,9 +97,9 @@ class FileComponent(DataTypeComponent):
     def process_mb_invenio_record_service_config(self, *, datatype, section, **kwargs):
         if datatype.root.profile == "files":
             # override class as it has to be a parent class
-            section.config.setdefault("record", {})[
-                "class"
-            ] = datatype.parent_record.definition["record"]["class"]
+            section.config.setdefault("record", {})["class"] = (
+                datatype.parent_record.definition["record"]["class"]
+            )
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
         if not datatype.root.profile == "files":
@@ -107,8 +108,9 @@ class FileComponent(DataTypeComponent):
         parent_record_datatype: DataType = context["published_record"]
         datatype.parent_record = parent_record_datatype
 
-        set_default(datatype, "search-options", {}).setdefault("skip", True)
-        set_default(datatype, "facets", {}).setdefault("skip", True)
         set_default(datatype, "json-schema-settings", {}).setdefault("skip", True)
-        set_default(datatype, "mapping-settings", {}).setdefault("skip", True)
         set_default(datatype, "record-dumper", {}).setdefault("skip", True)
+        set_default(datatype, "pid", {}).setdefault("skip", True)
+        set_default(datatype, "search-options", {}).setdefault("skip", True)
+        set_default(datatype, "record-item", {}).setdefault("skip", True)
+        set_default(datatype, "record-list", {}).setdefault("skip", True)
