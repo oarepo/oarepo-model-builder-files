@@ -16,7 +16,7 @@ def test_files_api_flow(client_with_credentials, search_clear, headers, input_da
         f"{base_files_url.replace('{id}', id_)}/files",
         headers=headers,
         json=[
-            {"key": "test.pdf", "title": "Test file"},
+            {"key": "test.pdf", "metadata": {"title": "Test file"}},
         ],
     )
     assert res.status_code == 201
@@ -65,7 +65,7 @@ def test_files_api_flow(client_with_credentials, search_clear, headers, input_da
 
     # Update file metadata
     res = client_with_credentials.put(
-        f"{base_files_url.replace('{id}', id_)}/files/test.pdf", headers=headers, json={"title": "New title"}
+        f"{base_files_url.replace('{id}', id_)}/files/test.pdf", headers=headers, json={"metadata": {"title": "New title"}}
     )
     assert res.status_code == 200
     assert res.json["key"] == "test.pdf"
@@ -191,7 +191,7 @@ def test_file_api_errors(client_with_credentials, search_clear, headers, input_d
         f"{base_files_url.replace('{id}', id_)}/files",
         headers=headers,
         json=[
-            {"key": "test.pdf", "title": "Test file"},
+            {"key": "test.pdf", "metadata": {"title": "Test file"}},
         ],
     )
     assert res.status_code == 201
@@ -218,7 +218,7 @@ def test_file_api_errors(client_with_credentials, search_clear, headers, input_d
         f"{base_files_url.replace('{id}', id_)}/files",
         headers=headers,
         json=[
-            {"key": "test.pdf", "title": "Test file"},
+            {"key": "test.pdf", "metadata": {"title": "Test file"}},
         ],
     )
     assert res.status_code == 400
@@ -293,7 +293,7 @@ def test_record_file_links(app, client_with_credentials, input_data, headers, ba
         f"{base_files_url.replace('{id}', id_)}/files",
         headers=headers,
         json=[
-            {"key": "test.pdf", "title": "Test file"},
+            {"key": "test.pdf", "metadata": {"title": "Test file"}},
         ],
     )
     res = client_with_credentials.get(

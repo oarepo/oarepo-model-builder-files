@@ -27,6 +27,9 @@ class FileComponent(DataTypeComponent):
 
     def process_links(self, datatype, section: Section, **kwargs):
         url_prefix = url_prefix2link(datatype.definition["resource-config"]["base-url"])
+        ui_prefix = url_prefix2link(
+            datatype.definition["resource-config"]["base-html-url"]
+        )
 
         if datatype.root.profile == "record":
             has_files = "files" in datatype.definition
@@ -92,14 +95,20 @@ class FileComponent(DataTypeComponent):
                     link_args=[f'"{{+api}}{url_prefix}files/{{key}}/commit"'],
                     imports=[Import("invenio_records_resources.services.FileLink")],
                 ),
+                Link(
+                    name="preview",
+                    link_class="FileLink",
+                    link_args=[f'"{{+ui}}{ui_prefix}files/{{key}}/preview"'],
+                    imports=[Import("invenio_records_resources.services.FileLink")],
+                ),
             ]
 
     def process_mb_invenio_record_service_config(self, *, datatype, section, **kwargs):
         if datatype.root.profile == "files":
             # override class as it has to be a parent class
-            section.config.setdefault("record", {})["class"] = (
-                datatype.parent_record.definition["record"]["class"]
-            )
+            section.config.setdefault("record", {})[
+                "class"
+            ] = datatype.parent_record.definition["record"]["class"]
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
         if not datatype.root.profile == "files":

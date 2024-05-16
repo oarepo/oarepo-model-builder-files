@@ -2,7 +2,8 @@ import pytest
 {{ vars.resource_config.class|generate_import }}
 
 BASE_URLS = {
-    "base_files_url": {{ vars.resource_config.class|base_name }}.url_prefix.replace({% raw %}"<pid_value>"{% endraw %}, "{id}")
+    "base_files_url": {{ vars.resource_config.class|base_name }}.url_prefix.replace({% raw %}"<pid_value>"{% endraw %}, "{id}"),
+    "base_html_files_url": "{{ vars.resource_config.base_html_url }}{id}"
 }
 
 APP_CONFIG = {
