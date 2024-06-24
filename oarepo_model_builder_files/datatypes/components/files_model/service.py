@@ -9,6 +9,7 @@ class FilesServiceModelComponent(ServiceModelComponent):
     dependency_remap = ServiceModelComponent
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
+
         service_config = set_default(datatype, "service-config", {})
         service_config.setdefault(
             "base-classes",
@@ -18,7 +19,10 @@ class FilesServiceModelComponent(ServiceModelComponent):
             ],
         )
         service_config.setdefault("imports", [])
-
+        allowed_mimetypes = datatype.definition.get('allowed-mimetypes', [])
+        allowed_extensions = datatype.definition.get('allowed-extensions', [])
+        service_config.setdefault("mimetypes", allowed_mimetypes)
+        service_config.setdefault("extensions", allowed_extensions)
         service = set_default(datatype, "service", {})
         service.setdefault(
             "base-classes", ["invenio_records_resources.services.FileService"]
