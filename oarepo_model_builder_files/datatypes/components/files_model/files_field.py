@@ -18,6 +18,7 @@ class FilesFieldSchema(ma.Schema):
         attribute="file-class",
         data_key="file-class",
     )
+
     field_args = ma.fields.List(
         ma.fields.String(),
         attribute="field-args",
@@ -40,6 +41,16 @@ class FilesFieldModelComponent(DataTypeComponent):
             attribute="files-field",
             data_key="files-field",
             metadata={"doc": "Files field settings"},
+        )
+        allowed_mimetypes = ma.fields.List(
+            ma.fields.String(),
+            attribute="allowed-mimetypes",
+            data_key="allowed-mimetypes",
+        )
+        allowed_extensions = ma.fields.List(
+            ma.fields.String(),
+            attribute="allowed-extensions",
+            data_key="allowed-extensions",
         )
 
     def before_model_prepare(self, datatype, *, context, **kwargs):

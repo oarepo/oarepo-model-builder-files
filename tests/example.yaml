@@ -14,6 +14,8 @@ record:
     - invenio
 
   files:
+    allowed-mimetypes:
+      - application/pdf
     properties:
       metadata:
         properties:
