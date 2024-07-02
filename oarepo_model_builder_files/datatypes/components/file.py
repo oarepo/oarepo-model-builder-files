@@ -27,10 +27,6 @@ class FileComponent(DataTypeComponent):
 
     def process_links(self, datatype, section: Section, **kwargs):
         url_prefix = url_prefix2link(datatype.definition["resource-config"]["base-url"])
-        ui_prefix = url_prefix2link(
-            datatype.definition["resource-config"]["base-html-url"]
-        )
-        ui_prefix = f"{ui_prefix}{{id}}/"
 
         if datatype.root.profile == "record":
             has_files = "files" in datatype.definition
@@ -63,6 +59,11 @@ class FileComponent(DataTypeComponent):
                     )
                 )
         if datatype.root.profile == "files":
+            ui_prefix = url_prefix2link(
+                datatype.parent_record.definition["resource-config"]["base-html-url"]
+            )
+            ui_prefix = f"{ui_prefix}{{id}}/"
+
             if "links_search" in section.config:
                 section.config.pop("links_search")
             # remove normal links and add
