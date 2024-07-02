@@ -30,6 +30,7 @@ class FileComponent(DataTypeComponent):
         ui_prefix = url_prefix2link(
             datatype.definition["resource-config"]["base-html-url"]
         )
+        ui_prefix = f"{ui_prefix}{{id}}/"
 
         if datatype.root.profile == "record":
             has_files = "files" in datatype.definition
@@ -41,6 +42,7 @@ class FileComponent(DataTypeComponent):
                 )
             except KeyError:
                 files_url_prefix = f"{url_prefix}{{id}}/"
+
             # add files link item
             has_files = False
             for link in section.config["links_item"]:
