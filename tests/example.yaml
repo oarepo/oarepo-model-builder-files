@@ -12,7 +12,9 @@ record:
     presets: ['everyone']
   use:
     - invenio
-
+  # test that preview url is correctly pointing to ui url, not api
+  resource-config:
+    base-html-url: /docs/
   files:
     allowed-mimetypes:
       - application/pdf
