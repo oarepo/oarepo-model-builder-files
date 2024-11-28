@@ -301,3 +301,27 @@ def test_record_file_links(app, client_with_credentials, input_data, headers, ba
     )
     assert_record_file_links(id_, res.json["links"], base_urls)
     assert_file_links(id_, res.json["entries"][0]["links"], base_urls)
+
+def test_record_file_links_no_permissions(
+    app,
+    client,
+    input_data,
+    headers,
+    base_urls,
+    site_hostname="127.0.0.1:5000",
+):
+    base_files_url = base_urls["{{ test_constants.files_base_url_placeholder }}"]
+
+    res = client.post(base_urls['base_url'], json=input_data)
+
+    id_ = res.json["id"]
+    assert "files" not in res.json["links"]
+
+    res = client.post(
+        f"{base_files_url.replace('{id}', id_)}/files",
+        headers=headers,
+        json=[
+            {"key": "test.pdf", "metadata": {"title": "Test file"}},
+        ],
+    )
+    assert res.status_code == 403 # todo patch permissions and test individual links

@@ -50,11 +50,15 @@ class FileComponent(DataTypeComponent):
                     Link(
                         name="files",
                         link_class="RecordLink",
-                        link_args=[f'"{{+api}}{files_url_prefix}files"'],
+                        link_args=[
+                            f'"{{+api}}{files_url_prefix}files"',
+                            f'when=has_permission_file_service("list_files")',
+                        ],
                         imports=[
                             Import(
                                 import_path="invenio_records_resources.services.RecordLink"  # NOSONAR
-                            )
+                            ),
+                            Import("oarepo_runtime.services.config.has_permission_file_service"),
                         ],
                     )
                 )
@@ -66,13 +70,22 @@ class FileComponent(DataTypeComponent):
 
             if "links_search" in section.config:
                 section.config.pop("links_search")
+
+            if "links_search_item" in section.config:
+                section.config.pop("links_search_item")
             # remove normal links and add
             section.config["file_links_list"] = [
                 Link(
                     name="self",
                     link_class="RecordLink",
-                    link_args=[f'"{{+api}}{url_prefix}files"'],
-                    imports=[Import("invenio_records_resources.services.RecordLink")],
+                    link_args=[
+                        f'"{{+api}}{url_prefix}files"',
+                        'when=has_permission_file_service("list_files")',
+                    ],
+                    imports=[
+                        Import("invenio_records_resources.services.RecordLink"),
+                        Import("oarepo_runtime.services.config.has_permission_file_service"),
+                    ],
                 ),
             ]
 
@@ -81,22 +94,38 @@ class FileComponent(DataTypeComponent):
                 Link(
                     name="self",
                     link_class="FileLink",
-                    link_args=[f'"{{+api}}{url_prefix}files/{{key}}"'],
+                    link_args=[f'"{{+api}}{url_prefix}files/{{key}}"',
+                               'when=has_permission_file_service("read_files")',],
                     imports=[
-                        Import("invenio_records_resources.services.FileLink")
+                        Import(
+                            "invenio_records_resources.services.FileLink",
+                        ),
+                        Import("oarepo_runtime.services.config.has_permission_file_service"),
                     ],  # NOSONAR
                 ),
                 Link(
                     name="content",
                     link_class="FileLink",
-                    link_args=[f'"{{+api}}{url_prefix}files/{{key}}/content"'],
-                    imports=[Import("invenio_records_resources.services.FileLink")],
+                    link_args=[
+                        f'"{{+api}}{url_prefix}files/{{key}}/content"',
+                        'when=has_permission_file_service("get_content_files")',
+                    ],
+                    imports=[
+                        Import("invenio_records_resources.services.FileLink"),
+                        Import("oarepo_runtime.services.config.has_permission_file_service"),
+                    ],
                 ),
                 Link(
                     name="commit",
                     link_class="FileLink",
-                    link_args=[f'"{{+api}}{url_prefix}files/{{key}}/commit"'],
-                    imports=[Import("invenio_records_resources.services.FileLink")],
+                    link_args=[
+                        f'"{{+api}}{url_prefix}files/{{key}}/commit"',
+                        'when=has_permission_file_service("commit_files")',
+                    ],
+                    imports=[
+                        Import("invenio_records_resources.services.FileLink"),
+                        Import("oarepo_runtime.services.config.has_permission_file_service"),
+                    ],
                 ),
                 Link(
                     name="preview",
@@ -109,9 +138,9 @@ class FileComponent(DataTypeComponent):
     def process_mb_invenio_record_service_config(self, *, datatype, section, **kwargs):
         if datatype.root.profile == "files":
             # override class as it has to be a parent class
-            section.config.setdefault("record", {})[
-                "class"
-            ] = datatype.parent_record.definition["record"]["class"]
+            section.config.setdefault("record", {})["class"] = (
+                datatype.parent_record.definition["record"]["class"]
+            )
 
     def before_model_prepare(self, datatype, *, context, **kwargs):
         if not datatype.root.profile == "files":
