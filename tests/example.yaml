@@ -23,6 +23,8 @@ record:
         properties:
           title:
             type: fulltext
+    permissions:
+      presets: ['authenticated']
     use:
       - invenio_files
 
