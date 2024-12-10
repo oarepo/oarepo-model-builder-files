@@ -30,4 +30,5 @@ class FilesExtResourceModelComponent(DataTypeComponent):
         ext = set_default(datatype, "ext-resource", {})
 
         ext.setdefault("generate", True)
+        ext.setdefault("service-kwargs", {})
         ext.setdefault("skip", False)
