@@ -304,7 +304,8 @@ def test_record_file_links(app, client_with_credentials, input_data, headers, ba
 
 def test_record_file_links_no_permissions(
     app,
-    client,
+    client_with_credentials,
+    anonymous_client,
     input_data,
     headers,
     base_urls,
@@ -312,12 +313,12 @@ def test_record_file_links_no_permissions(
 ):
     base_files_url = base_urls["{{ test_constants.files_base_url_placeholder }}"]
 
-    res = client.post(base_urls['base_url'], json=input_data)
+    res = client_with_credentials.post(base_urls['base_url'], json=input_data)
 
     id_ = res.json["id"]
-    assert "files" not in res.json["links"]
+    assert "files" in res.json["links"]
 
-    res = client.post(
+    res = anonymous_client.post(
         f"{base_files_url.replace('{id}', id_)}/files",
         headers=headers,
         json=[
