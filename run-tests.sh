@@ -4,7 +4,8 @@ set -e
 OAREPO_VERSION=${OAREPO_VERSION:-12}
 BUILDER_VENV=".venv-builder"
 VENV_TESTS=".venv-tests"
-
+export PIP_EXTRA_INDEX_URL=https://gitlab.cesnet.cz/api/v4/projects/1408/packages/pypi/simple
+export UV_EXTRA_INDEX_URL=https://gitlab.cesnet.cz/api/v4/projects/1408/packages/pypi/simple
 if test -d $BUILDER_VENV ; then
 	rm -rf $BUILDER_VENV
 fi
@@ -14,7 +15,7 @@ if test -d $VENV_TESTS ; then
 fi
 
 
-python3 -m venv $BUILDER_VENV
+python3.12 -m venv $BUILDER_VENV
 . $BUILDER_VENV/bin/activate
 pip install -U setuptools pip wheel
 pip install -e .
@@ -24,10 +25,10 @@ if test -d tests/example-model; then
 fi
 oarepo-compile-model ./tests/example.yaml --output-directory ./tests/example-model --profile record,files -vvv
 
-python3 -m venv $VENV_TESTS
+python3.12 -m venv $VENV_TESTS
 . $VENV_TESTS/bin/activate
 pip install -U setuptools pip wheel
-pip install "oarepo[tests]==${OAREPO_VERSION}.*"
+pip install "oarepo[tests, rdm]==${OAREPO_VERSION}.*"
 pip install "./tests/example-model[tests]"
 pytest tests/example-model/tests
 
@@ -43,9 +44,9 @@ fi
 . $BUILDER_VENV/bin/activate
 
 oarepo-compile-model ./tests/example_no_files.yaml --output-directory ./tests/example-model-no-files --profile record -vvv
-python3 -m venv $VENV_TESTS
+python3.12 -m venv $VENV_TESTS
 . $VENV_TESTS/bin/activate
 pip install -U setuptools pip wheel
-pip install "oarepo[tests]==${OAREPO_VERSION}.*"
+pip install "oarepo[tests, rdm]==${OAREPO_VERSION}.*"
 pip install "./tests/example-model-no-files[tests]"
 pytest tests/example-model-no-files/tests
