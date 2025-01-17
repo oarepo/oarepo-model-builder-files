@@ -15,7 +15,7 @@ if test -d $VENV_TESTS ; then
 fi
 
 
-python3.12 -m venv $BUILDER_VENV
+python3 -m venv $BUILDER_VENV
 . $BUILDER_VENV/bin/activate
 pip install -U setuptools pip wheel
 pip install -e .
@@ -25,7 +25,7 @@ if test -d tests/example-model; then
 fi
 oarepo-compile-model ./tests/example.yaml --output-directory ./tests/example-model --profile record,files -vvv
 
-python3.12 -m venv $VENV_TESTS
+python3 -m venv $VENV_TESTS
 . $VENV_TESTS/bin/activate
 pip install -U setuptools pip wheel
 pip install "oarepo[tests, rdm]==${OAREPO_VERSION}.*"
@@ -44,7 +44,7 @@ fi
 . $BUILDER_VENV/bin/activate
 
 oarepo-compile-model ./tests/example_no_files.yaml --output-directory ./tests/example-model-no-files --profile record -vvv
-python3.12 -m venv $VENV_TESTS
+python3 -m venv $VENV_TESTS
 . $VENV_TESTS/bin/activate
 pip install -U setuptools pip wheel
 pip install "oarepo[tests, rdm]==${OAREPO_VERSION}.*"
